@@ -1,7 +1,7 @@
 import type { StageId } from '@aifs/shared';
 import { useCallback, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { api, ApiRequestError, type QuizSubmissionResult } from '../api/index.js';
+import { api, ApiRequestError, DEMO_READONLY, type QuizSubmissionResult } from '../api/index.js';
 import { Badge, ErrorState, LoadingState } from '../components/ui.js';
 import { accentOf } from '../lib/format.js';
 import { useAsync } from '../state/hooks.js';
@@ -173,7 +173,7 @@ export function QuizPage() {
                         name={question.id}
                         value={optionIndex}
                         checked={isSelected ?? false}
-                        disabled={Boolean(result)}
+                        disabled={Boolean(result) || DEMO_READONLY}
                         onChange={() =>
                           setAnswers((prev) => ({ ...prev, [question.id]: optionIndex }))
                         }
@@ -197,7 +197,7 @@ export function QuizPage() {
         })}
       </ol>
 
-      {!result && questions.length > 0 && (
+      {!result && questions.length > 0 && !DEMO_READONLY && (
         <div className="sticky bottom-4 flex items-center gap-4 rounded-xl border border-slate-200 bg-white/95 p-4 shadow-lg backdrop-blur">
           <p className="text-sm text-slate-500">
             已作答 {answeredCount}/{questions.length}
@@ -212,6 +212,12 @@ export function QuizPage() {
             {submitting ? '提交中…' : '提交并查看解析'}
           </button>
         </div>
+      )}
+
+      {DEMO_READONLY && questions.length > 0 && (
+        <p className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          只读预览：题目可以浏览，但作答与提交已禁用，所以看不到判分与解析的效果。
+        </p>
       )}
 
       {questions.length === 0 && (

@@ -254,13 +254,19 @@ describe('自测', () => {
     });
   });
 
-  it('作答历史可选且按时间倒序', async () => {
+  it('作答历史可选且按时间倒序（同一毫秒内提交也要顺序稳定）', async () => {
+    // 两次提交几乎同时发生，createdAt 很可能完全相同 ——
+    // 这时必须靠插入顺序兜底，否则列表顺序会随机跳
     await mockApi.submitQuiz('rag', answersFor('rag', 2));
     await mockApi.submitQuiz('rag', answersFor('rag', 6));
 
     const { attempts } = await mockApi.listAttempts('rag');
     expect(attempts).toHaveLength(2);
-    expect(attempts[0]?.score).toBe(6);
+    expect(attempts.map((a) => a.score)).toEqual([6, 2]);
+
+    // 连查两次顺序必须一致
+    const again = await mockApi.listAttempts('rag');
+    expect(again.attempts.map((a) => a.score)).toEqual([6, 2]);
   });
 });
 

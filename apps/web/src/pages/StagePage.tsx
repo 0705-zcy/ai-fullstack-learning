@@ -1,7 +1,7 @@
 import type { ProgressStatus, StageId } from '@aifs/shared';
 import { useCallback, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { api } from '../api/index.js';
+import { api, DEMO_READONLY } from '../api/index.js';
 import { ResourceCard } from '../components/ResourceCard.js';
 import { Badge, ErrorState, EmptyState, LoadingState, ProgressBar } from '../components/ui.js';
 import { accentOf, formatHours, toPercent } from '../lib/format.js';
@@ -149,18 +149,28 @@ export function StagePage() {
             }
           />
         ) : (
-          <div className="grid gap-4 lg:grid-cols-2">
-            {resources.map((resource) => (
-              <ResourceCard
-                key={resource.id}
-                resource={resource}
-                status={progress.map.get(resource.id)}
-                busy={mutation.pending.has(resource.id)}
-                onSelectStatus={(status) => handleSelect(resource.id, status)}
-                onClearStatus={() => handleClear(resource.id)}
-              />
-            ))}
-          </div>
+          <>
+            {DEMO_READONLY && (
+              <p className="mb-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-900">
+                只读预览：这里的进度标记已禁用，页面上显示的是示例数据。
+              </p>
+            )}
+            <div className="grid gap-4 lg:grid-cols-2">
+              {resources.map((resource) => (
+                <ResourceCard
+                  key={resource.id}
+                  resource={resource}
+                  status={progress.map.get(resource.id)}
+                  busy={mutation.pending.has(resource.id)}
+                  // 传 undefined 就等同于「不可交互」，ResourceCard 会自己收起那一行
+                  onSelectStatus={
+                    DEMO_READONLY ? undefined : (status) => handleSelect(resource.id, status)
+                  }
+                  onClearStatus={DEMO_READONLY ? undefined : () => handleClear(resource.id)}
+                />
+              ))}
+            </div>
+          </>
         )}
       </section>
     </div>

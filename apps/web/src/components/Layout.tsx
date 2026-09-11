@@ -1,4 +1,5 @@
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
+import { DEMO_READONLY } from '../api/index.js';
 import { useAuth } from '../state/AuthContext.js';
 
 const NAV_ITEMS = [
@@ -50,13 +51,20 @@ export function Layout() {
             {user ? (
               <>
                 <span className="hidden text-sm text-slate-500 sm:inline">{user.displayName}</span>
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50"
-                >
-                  退出
-                </button>
+                {DEMO_READONLY ? (
+                  // 只读预览里没有「退出」这回事：退出了也会立刻被认回来
+                  <span className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-1.5 text-xs font-medium text-amber-800">
+                    只读预览
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm text-slate-600 hover:bg-slate-50"
+                  >
+                    退出
+                  </button>
+                )}
               </>
             ) : (
               <Link

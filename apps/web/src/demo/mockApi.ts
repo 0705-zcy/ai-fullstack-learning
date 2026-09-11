@@ -25,6 +25,7 @@ import {
   type ResourceFacets,
   type ResourceQuery,
 } from '../api/client.js';
+import { DEMO_READONLY } from '../api/mode.js';
 import demoData from './data.json';
 
 /**
@@ -37,6 +38,9 @@ import demoData from './data.json';
  *     从后端种子数据导出，不是另写一份假数据。
  *  3. **状态持久化到 localStorage**——刷新页面不会丢失进度，
  *     否则没法完整走一遍「标记进度 → 做自测 → 看阶段解锁」的流程。
+ *
+ * 在 `--mode preview`（只读预览）下，第 3 点关闭、所有写操作拒绝：
+ * 那是给人看界面的，不是给人用产品的。
  */
 
 const STORAGE_KEY = 'aifs-demo-state-v1';
@@ -76,7 +80,20 @@ function fail(status: number, code: string, message: string): never {
   throw new ApiRequestError(status, code, message);
 }
 
+/** 只读预览下统一的拒绝方式，措辞要说清楚「这是演示，不是坏了」。 */
+function rejectWrite(action: string): never {
+  fail(403, 'read_only', `只读预览模式：${action}已禁用。这是用于查看界面的演示，不是可用的产品。`);
+}
+
 // ---------- 状态读写 ----------
+
+/** 只读预览里自动登录的身份，访问者不需要注册。 */
+const READONLY_USER: User = {
+  id: 'demo-preview-user',
+  email: 'preview@aifs.dev',
+  displayName: '预览访客',
+  createdAt: '2025-01-01T00:00:00.000Z',
+};
 
 function load(): DemoState {
   try {
@@ -95,9 +112,13 @@ function load(): DemoState {
   }
 }
 
-let state: DemoState = load();
+// 只读预览用预置的示例状态（看起来是"学了一半"），并且不落盘——
+// 每个访客看到的都是同一份干净、可预期的内容
+let state: DemoState = DEMO_READONLY ? sampleState(READONLY_USER) : load();
 
 function persist(): void {
+  if (DEMO_READONLY) return;
+
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch {
@@ -324,6 +345,8 @@ export const mockApi: ApiClient = {
   },
 
   async register(input: { email: string; password: string; displayName?: string }) {
+    if (DEMO_READONLY) rejectWrite('注册');
+
     const email = input.email.trim().toLowerCase();
 
     if (!EMAIL_PATTERN.test(email)) fail(400, 'bad_request', '请输入有效的邮箱地址');
@@ -368,12 +391,18 @@ export const mockApi: ApiClient = {
   },
 
   async logout() {
+    // 只读预览里「退出」没有意义：me() 永远返回预览身份，
+    // 退出了也立刻又被认回来，不如直接当成功让界面不报错
+    if (DEMO_READONLY) return delay({ ok: true as const });
+
     state = { ...state, user: null };
     persist();
     return delay({ ok: true as const });
   },
 
   async me() {
+    // 只读预览无需登录，直接给一个预览身份
+    if (DEMO_READONLY) return delay({ user: state.user as User });
     return delay({ user: requireUser() });
   },
 
@@ -429,6 +458,8 @@ export const mockApi: ApiClient = {
     stageId: StageId,
     answers: Array<{ questionId: string; optionIndex: number }>,
   ): Promise<QuizSubmissionResult> {
+    if (DEMO_READONLY) rejectWrite('提交自测');
+
     requireUser();
     if (!isStageId(stageId)) fail(404, 'not_found', `未知的阶段：${stageId}`);
 
@@ -461,8 +492,16 @@ export const mockApi: ApiClient = {
 
     return delay({
       attempts: state.attempts
-        .filter((attempt) => attempt.stage === stageId)
-        .sort((a, b) => b.createdAt.localeCompare(a.createdAt)),
+        .map((attempt, index) => ({ attempt, index }))
+        .filter((entry) => entry.attempt.stage === stageId)
+        // 同一毫秒内的两次提交时间戳会完全相同，光比 createdAt 顺序不稳定。
+        // 用下标兜底 —— 真实后端的 SQL 是 ORDER BY created_at DESC, rowid DESC，
+        // 这里必须对齐，否则演示和真实产品的表现会不一致。
+        .sort(
+          (a, b) =>
+            b.attempt.createdAt.localeCompare(a.attempt.createdAt) || b.index - a.index,
+        )
+        .map((entry) => entry.attempt),
     });
   },
 
@@ -472,6 +511,8 @@ export const mockApi: ApiClient = {
   },
 
   async setProgress(resourceId: string, status: ProgressStatus) {
+    if (DEMO_READONLY) rejectWrite('标记进度');
+
     requireUser();
     if (!RESOURCES.some((r) => r.id === resourceId)) {
       fail(404, 'not_found', '找不到这个资源，无法记录进度');
@@ -484,6 +525,8 @@ export const mockApi: ApiClient = {
   },
 
   async clearProgress(resourceId: string) {
+    if (DEMO_READONLY) rejectWrite('清除进度');
+
     requireUser();
     if (!state.progress[resourceId]) fail(404, 'not_found', '这条进度记录不存在');
 
@@ -499,14 +542,16 @@ export const mockApi: ApiClient = {
 
 /** 演示模式独有的操作，真实 API 没有对应方法。 */
 export const demoControls = {
-  /** 清空全部演示数据，回到「新用户」状态。 */
+  /** 清空全部演示数据，回到「新用户」状态。只读预览下是空操作。 */
   reset(): void {
+    if (DEMO_READONLY) return;
     state = structuredClone(EMPTY_STATE);
     persist();
   },
 
   /** 一键填充「学了一半」的示例进度，便于预览有数据时的界面。 */
   fillSampleProgress(): void {
+    if (DEMO_READONLY) return;
     if (!state.user) return;
     const preserved = state.user;
     state = sampleState(preserved);

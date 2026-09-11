@@ -1,6 +1,6 @@
 import type { Difficulty, LanguageCode, ProgressStatus, ResourceFormat, StageId } from '@aifs/shared';
 import { useCallback, useMemo } from 'react';
-import { api } from '../api/index.js';
+import { api, DEMO_READONLY } from '../api/index.js';
 import { ResourceCard } from '../components/ResourceCard.js';
 import { EmptyState, ErrorState, LoadingState } from '../components/ui.js';
 import { useAsync, useProgressMap, useProgressMutation, useResourceFilters } from '../state/hooks.js';
@@ -258,8 +258,11 @@ export function LibraryPage() {
               resource={resource}
               status={progress.map.get(resource.id)}
               busy={mutation.pending.has(resource.id)}
-              onSelectStatus={(status) => handleSelect(resource.id, status)}
-              onClearStatus={() => handleClear(resource.id)}
+              // 只读预览时不传回调，卡片会自动收起进度按钮
+              onSelectStatus={
+                DEMO_READONLY ? undefined : (status) => handleSelect(resource.id, status)
+              }
+              onClearStatus={DEMO_READONLY ? undefined : () => handleClear(resource.id)}
             />
           ))}
         </div>

@@ -1,6 +1,7 @@
 node_modules/
 dist/
 dist-demo/
+dist-preview/
 coverage/
 .vite/
 *.tsbuildinfo
@@ -18,6 +19,7 @@ data/
 !.env.example
 # 演示模式配置需要入库：它是产品的一部分，不含任何密钥
 !**/.env.demo
+!**/.env.preview
 
 # 编辑器 / 系统
 .DS_Store
