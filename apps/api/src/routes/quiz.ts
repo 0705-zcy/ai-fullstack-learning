@@ -1,8 +1,7 @@
-import { isStageId, submitQuizSchema } from '@aifs/shared';
+import { gradeQuiz, isQuizPassed, isStageId, submitQuizSchema } from '@aifs/shared';
 import { Hono } from 'hono';
 import type { AppConfig } from '../config.js';
 import type { Db } from '../db/index.js';
-import { gradeQuiz, isQuizPassed } from '../domain/quiz.js';
 import { requireAuth, type AppEnv } from '../lib/auth.js';
 import { HttpError } from '../lib/errors.js';
 import { parseJsonBody } from '../lib/validate.js';

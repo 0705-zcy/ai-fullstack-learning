@@ -1,17 +1,21 @@
-import {
-  QUIZ_PASS_RATIO,
-  STAGES,
-  type DashboardSummary,
-  type ProgressStatus,
-  type Resource,
-  type Stage,
-  type StageId,
-  type StageProgress,
-  type User,
-} from '@aifs/shared';
+import { QUIZ_PASS_RATIO, STAGES } from '../stages.js';
+import type {
+  DashboardSummary,
+  ProgressStatus,
+  Resource,
+  Stage,
+  StageId,
+  StageProgress,
+  User,
+} from '../types.js';
 
 /**
- * 学习进度计算。**纯函数**，不碰数据库，方便单测。
+ * 学习进度计算。**纯函数**，不碰数据库、不碰网络。
+ *
+ * 放在 shared 而不是后端，是因为它需要有两个消费者：
+ *  - 真实后端（apps/api）用它算用户仪表盘
+ *  - 前端演示模式（apps/web）用同一套规则在浏览器里模拟
+ * 两边共用同一份实现，演示出来的进度数字才和真实产品一致。
  *
  * 完成规则（刻意做得可解释）：
  *  - 阶段完成 = 该阶段资源全部标记 completed，且自测通过（正确率 >= 80%）
@@ -136,8 +140,7 @@ export function buildDashboard(
     return sum + (resource ? resource.durationHours : 0);
   }, 0);
 
-  const currentStage =
-    stageProgress.find((s) => s.unlocked && !s.completed)?.stage.id ?? null;
+  const currentStage = stageProgress.find((s) => s.unlocked && !s.completed)?.stage.id ?? null;
 
   return {
     user: input.user,
@@ -189,15 +192,17 @@ export function pickContinueLearning(input: {
     return input.progressByResource.get(resource.id) !== 'completed';
   });
 
-  const pool = candidates.length > 0
-    ? candidates
-    : input.resources.filter((r) => input.progressByResource.get(r.id) !== 'completed');
+  const pool =
+    candidates.length > 0
+      ? candidates
+      : input.resources.filter((r) => input.progressByResource.get(r.id) !== 'completed');
 
   if (pool.length === 0) return null;
 
-  return [...pool].sort(
-    (a, b) => a.durationHours - b.durationHours || a.title.localeCompare(b.title),
-  )[0] ?? null;
+  return (
+    [...pool].sort((a, b) => a.durationHours - b.durationHours || a.title.localeCompare(b.title))[0] ??
+    null
+  );
 }
 
 /** 便捷入口：用默认的 6 阶段定义构建仪表盘。 */

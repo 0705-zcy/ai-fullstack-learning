@@ -1,4 +1,12 @@
-import { QUIZ_PASS_RATIO, type QuizQuestion, type StageId } from '@aifs/shared';
+import { QUIZ_PASS_RATIO } from '../stages.js';
+import type { QuizQuestion, StageId } from '../types.js';
+
+/**
+ * 判卷逻辑。**纯函数**，不碰数据库。
+ *
+ * 和后端共用同一份实现：前端演示模式必须用真实规则判分，
+ * 否则演示出来的分数和通过线就是假的。
+ */
 
 /** 单题判卷结果。 */
 export interface GradedAnswer {
@@ -27,7 +35,7 @@ export interface SubmittedAnswer {
 }
 
 /**
- * 判卷。**纯函数**，不碰数据库。
+ * 判卷。
  *
  * 规则：
  *  - 只统计属于该阶段的题目；跨阶段的题目 id 直接忽略（防止刷分）

@@ -1,8 +1,7 @@
-import { STAGES, type DashboardSummary } from '@aifs/shared';
+import { STAGES, buildDashboard, type DashboardSummary } from '@aifs/shared';
 import { Hono } from 'hono';
 import type { AppConfig } from '../config.js';
 import type { Db } from '../db/index.js';
-import { buildDashboard } from '../domain/progress.js';
 import { requireAuth, type AppEnv } from '../lib/auth.js';
 import { countQuestionsByStage } from '../repositories/quiz.js';
 import { getBestQuizScores, getProgressMap, listProgress } from '../repositories/progress.js';

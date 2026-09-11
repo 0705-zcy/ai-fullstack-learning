@@ -1,8 +1,12 @@
-import type { QuizQuestion } from '@aifs/shared';
 import { describe, expect, it } from 'vitest';
+import type { QuizQuestion } from '../types.js';
 import { gradeQuiz, isQuizPassed } from './quiz.js';
 
-function question(id: string, answerIndex: number, stage: QuizQuestion['stage'] = 'rag'): QuizQuestion {
+function question(
+  id: string,
+  answerIndex: number,
+  stage: QuizQuestion['stage'] = 'rag',
+): QuizQuestion {
   return {
     id,
     stage,

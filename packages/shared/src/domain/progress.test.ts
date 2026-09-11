@@ -1,12 +1,61 @@
-import { STAGES, type ProgressStatus, type Resource, type StageId } from '@aifs/shared';
 import { describe, expect, it } from 'vitest';
-import { createFixtureResources, makeResource } from '../test-support/context.js';
+import { STAGES } from '../stages.js';
+import type { ProgressStatus, Resource, StageId } from '../types.js';
 import {
   UNLOCK_COMPLETION_THRESHOLD,
   buildDashboard,
   buildStageProgress,
   pickContinueLearning,
 } from './progress.js';
+
+/**
+ * 这些测试跟着实现一起放在 shared：
+ * 后端和前端演示模式共用同一份进度规则，测试自然也应该覆盖这一份。
+ */
+
+function makeResource(input: {
+  id: string;
+  stage: StageId;
+  title?: string;
+  durationHours?: number;
+}): Resource {
+  return {
+    id: input.id,
+    title: input.title ?? `测试资源 ${input.id}`,
+    url: `https://example.com/${input.id}`,
+    provider: '测试提供方',
+    language: 'en',
+    difficulty: 'beginner',
+    format: 'docs',
+    durationHours: input.durationHours ?? 4,
+    topics: ['testing'],
+    stage: input.stage,
+    description: `用于测试的 ${input.stage} 阶段资源`,
+    notes: '测试数据',
+    verified: true,
+  };
+}
+
+/** 每个阶段两个资源：一个 2 小时（默认推荐）、一个 8 小时。 */
+function createFixtureResources(): Resource[] {
+  const stages: StageId[] = [
+    'foundation',
+    'llm-core',
+    'rag',
+    'agent',
+    'engineering',
+    'capstone',
+  ];
+  return stages.flatMap((stage) => [
+    makeResource({ id: `${stage}-a`, stage, durationHours: 2 }),
+    makeResource({
+      id: `${stage}-b`,
+      stage,
+      durationHours: 8,
+      title: `测试资源 ${stage}-b`,
+    }),
+  ]);
+}
 
 const RESOURCES = createFixtureResources();
 
@@ -49,8 +98,7 @@ describe('buildStageProgress', () => {
   });
 
   it('按 order 排序输出，不受传入顺序影响', () => {
-    const shuffled = [...STAGES].reverse();
-    const result = buildStageProgress(shuffled, {
+    const result = buildStageProgress([...STAGES].reverse(), {
       resources: RESOURCES,
       progressByResource: new Map(),
       quizTotals: new Map(),
