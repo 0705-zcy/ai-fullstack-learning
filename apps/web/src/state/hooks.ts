@@ -1,6 +1,6 @@
 import type { DashboardSummary, ProgressStatus, Resource } from '@aifs/shared';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { api, ApiRequestError, type ResourceQuery } from '../api/client.js';
+import { api, ApiRequestError, type ResourceQuery } from '../api/index.js';
 
 export interface AsyncState<T> {
   data: T | null;

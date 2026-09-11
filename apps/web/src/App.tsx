@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
-import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { DEMO_MODE } from './api/index.js';
+import { DemoBanner } from './components/DemoBanner.js';
 import { Layout } from './components/Layout.js';
 import { LoadingState } from './components/ui.js';
 import { DashboardPage } from './pages/DashboardPage.js';
@@ -9,6 +11,12 @@ import { PathPage } from './pages/PathPage.js';
 import { QuizPage } from './pages/QuizPage.js';
 import { StagePage } from './pages/StagePage.js';
 import { AuthProvider, useAuth } from './state/AuthContext.js';
+
+/**
+ * 演示模式改用 HashRouter：`npm run build:demo` 产出的静态文件
+ * 可以直接双击打开或丢到任意静态托管上，不需要服务端 rewrite 规则。
+ */
+const Router = (DEMO_MODE ? HashRouter : BrowserRouter) as typeof BrowserRouter;
 
 /** 未登录时重定向到登录页，并记住原本想去的地址。 */
 function RequireAuth({ children }: { children: ReactNode }) {
@@ -37,8 +45,9 @@ function NotFoundPage() {
 
 export function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <AuthProvider>
+        <DemoBanner />
         <Routes>
           <Route path="/login" element={<LoginPage />} />
 
@@ -58,6 +67,6 @@ export function App() {
           </Route>
         </Routes>
       </AuthProvider>
-    </BrowserRouter>
+    </Router>
   );
 }

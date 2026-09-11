@@ -1,7 +1,7 @@
 import type { StageId } from '@aifs/shared';
 import { useCallback, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { api, ApiRequestError, type QuizSubmissionResult } from '../api/client.js';
+import { api, ApiRequestError, type QuizSubmissionResult } from '../api/index.js';
 import { Badge, ErrorState, LoadingState } from '../components/ui.js';
 import { accentOf } from '../lib/format.js';
 import { useAsync } from '../state/hooks.js';

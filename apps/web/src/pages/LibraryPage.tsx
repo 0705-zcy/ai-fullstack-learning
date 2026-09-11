@@ -1,6 +1,6 @@
 import type { Difficulty, LanguageCode, ProgressStatus, ResourceFormat, StageId } from '@aifs/shared';
 import { useCallback, useMemo } from 'react';
-import { api } from '../api/client.js';
+import { api } from '../api/index.js';
 import { ResourceCard } from '../components/ResourceCard.js';
 import { EmptyState, ErrorState, LoadingState } from '../components/ui.js';
 import { useAsync, useProgressMap, useProgressMutation, useResourceFilters } from '../state/hooks.js';

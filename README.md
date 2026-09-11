@@ -46,6 +46,31 @@ npm run dev
 
 打开前端后注册一个账号即可开始。
 
+## 只想先看界面？（演示模式）
+
+不想起后端、只想快速过一遍界面和操作流程：
+
+```bash
+npm install
+npm run demo
+```
+
+打开 http://localhost:5173，邮箱密码已预填，直接点登录即可。
+
+演示模式**不连接任何后端**，数据全部在浏览器里模拟，但有三点保证它「演的是真的」：
+
+- **同一套领域逻辑** —— 进度计算与判卷直接复用 `@aifs/shared`，所以百分比、解锁状态、通过线都和真实产品一致
+- **同一批课程数据** —— 48 个课程与 36 道题由 `npm run demo:data` 从后端种子数据导出，不是另写的假数据
+- **状态可保持** —— 进度写入 localStorage，刷新不丢失，能完整走「标记进度 → 做自测 → 看阶段解锁」
+
+右下角工具条可以一键「填充示例进度」（造出「学了一半」的状态）或「重置」。
+
+想要一个可以直接分享的静态版本：
+
+```bash
+npm run build:demo     # 产物在 apps/web/dist-demo，双击 index.html 即可打开
+```
+
 ## 常用命令
 
 ```bash
@@ -53,12 +78,17 @@ npm run dev          # 同时启动前后端（Vite 代理 /api 到后端，同�
 npm run dev:api      # 只启动后端（tsx watch）
 npm run dev:web      # 只启动前端
 
+npm run demo         # 演示模式：不起后端，数据全在浏览器里模拟
+npm run demo:data    # 从后端种子数据重新导出演示数据（改了课程后重跑）
+npm run build:demo   # 构建静态演示版到 apps/web/dist-demo
+
 npm test             # 跑全部测试（shared + api + web）
 npm run typecheck    # 全量类型检查
 npm run build        # 构建 shared、api 与 web
 
 npm run seed         # 手动重灌种子数据（幂等，不会删掉已有进度）
 npm start            # 生产模式启动后端（需先 npm run build）
+npm run smoke        # 端到端冒烟测试（需后端已在运行）
 ```
 
 ## 环境变量
@@ -87,8 +117,11 @@ apps/api/src/
 └── seed/                 课程资源与题库（含数据校验）
 
 apps/web/src/
-├── api/client.ts         类型化 API 客户端
-├── components/           Layout、ResourceCard、通用 UI 原子
+├── api/
+│   ├── client.ts         真实 API 客户端（fetch + 统一错误处理）
+│   └── index.ts          API 入口：按运行模式切换真实/mock，页面只认 `api`
+├── components/           Layout、ResourceCard、DemoBanner、通用 UI 原子
+├── demo/                 演示模式：内存 mockApi + 从种子数据导出的 data.json
 ├── lib/                  格式化与进度工具（纯函数，有单测）
 ├── pages/                登录 / 仪表盘 / 路径 / 阶段 / 资源库 / 自测
 └── state/                AuthContext 与数据获取 hooks
@@ -120,10 +153,10 @@ npm test
 
 覆盖重点：
 
-- `packages/shared` —— 阶段定义一致性与校验 schema（含「schema 里的字面量和阶段定义是否漂移」的断言）
-- `apps/api/domain` —— 进度计算与判卷的边界情况
+- `packages/shared` —— 阶段定义一致性、校验 schema、**进度计算与判卷的全部边界情况**（后端和演示模式共用这一份）
 - `apps/api/routes` —— 认证、鉴权、越权隔离、参数校验、答案不泄露
 - `apps/api/seed` —— 种子数据完整性（链接是 https、每阶段资源与题量达标、id 唯一）
+- `apps/web/demo` —— 演示模式与真实后端行为一致（同样的鉴权、筛选语义、不下发答案、同样的进度数字）
 - `apps/web/lib`、`components` —— 纯函数与资源卡片交互
 
 ## 后续（MVP 之外）

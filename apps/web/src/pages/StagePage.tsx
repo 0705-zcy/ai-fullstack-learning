@@ -1,7 +1,7 @@
 import type { ProgressStatus, StageId } from '@aifs/shared';
 import { useCallback, useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { api } from '../api/client.js';
+import { api } from '../api/index.js';
 import { ResourceCard } from '../components/ResourceCard.js';
 import { Badge, ErrorState, EmptyState, LoadingState, ProgressBar } from '../components/ui.js';
 import { accentOf, formatHours, toPercent } from '../lib/format.js';

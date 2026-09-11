@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { ApiRequestError } from '../api/client.js';
+import { ApiRequestError, DEMO_MODE } from '../api/index.js';
 import { STAGES } from '@aifs/shared';
+import { DEMO_CREDENTIALS } from '../demo/mockApi.js';
 import { useAuth } from '../state/AuthContext.js';
 
 type Mode = 'login' | 'register';
@@ -15,9 +16,10 @@ export function LoginPage() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const [mode, setMode] = useState<Mode>('register');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  // 演示模式预填凭据并默认走登录，省掉手输；真实模式默认走注册（新用户更多）
+  const [mode, setMode] = useState<Mode>(DEMO_MODE ? 'login' : 'register');
+  const [email, setEmail] = useState(DEMO_MODE ? DEMO_CREDENTIALS.email : '');
+  const [password, setPassword] = useState(DEMO_MODE ? DEMO_CREDENTIALS.password : '');
   const [displayName, setDisplayName] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -90,6 +92,13 @@ export function LoginPage() {
               ? '进度会保存在你的账号下，换设备也能接着学。'
               : '登录后继续上次的进度。'}
           </p>
+
+          {DEMO_MODE && (
+            <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900">
+              <strong>演示模式</strong>：邮箱密码已预填，直接点登录即可。
+              数据只在浏览器里模拟，右下角工具条可以一键填充示例进度或重置。
+            </p>
+          )}
 
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
             <div>

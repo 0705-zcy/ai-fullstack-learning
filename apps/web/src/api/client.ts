@@ -211,3 +211,9 @@ export const api = {
     return request<DashboardSummary>('/dashboard');
   },
 };
+
+/**
+ * 真实 API 的完整类型。
+ * 演示模式的 mock 实现会被标注成这个类型，因此任何签名不一致都会在编译期暴露。
+ */
+export type ApiClient = typeof api;

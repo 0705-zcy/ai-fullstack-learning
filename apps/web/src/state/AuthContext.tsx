@@ -8,7 +8,7 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { api } from '../api/client.js';
+import { api } from '../api/index.js';
 
 interface AuthContextValue {
   user: User | null;
