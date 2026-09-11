@@ -1,0 +1,31 @@
+{
+  "name": "ai-fullstack-learning-platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "AI 全栈开发工程师学习平台 —— 免费课程导航 + 学习路径 + 自测 + 进度管理",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "scripts": {
+    "build:shared": "npm run build -w @aifs/shared",
+    "dev": "npm run build:shared && concurrently -n api,web -c cyan,magenta \"npm:dev:api\" \"npm:dev:web\"",
+    "dev:api": "npm run dev -w @aifs/api",
+    "dev:web": "npm run dev -w @aifs/web",
+    "build": "npm run build:shared && npm run build -w @aifs/api && npm run build -w @aifs/web",
+    "test": "npm run build:shared && npm run test -w @aifs/shared && npm run test -w @aifs/api && npm run test -w @aifs/web",
+    "typecheck": "npm run build:shared && npm run typecheck -w @aifs/api && npm run typecheck -w @aifs/web",
+    "smoke": "node scripts/smoke.mjs",
+    "seed": "npm run seed -w @aifs/api",
+    "start": "npm run build:shared && npm run start -w @aifs/api"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
+  }
+}
