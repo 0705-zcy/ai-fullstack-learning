@@ -1,0 +1,19 @@
+# 统一换行符：仓库内一律存 LF，检出时交给 Git 自动转换。
+# 不设这一条的话，Windows 上提交会产生大量 CRLF 噪音 diff。
+* text=auto eol=lf
+
+# 二进制/生成物不参与换行符转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+
+# 锁文件与数据快照在 diff 里折叠，避免 review 时刷屏
+package-lock.json -diff linguist-generated=true
+apps/web/src/demo/data.json -diff linguist-generated=true
+
+# 演示数据是生成物，不参与语言统计
+apps/web/src/demo/data.json linguist-vendored=true
