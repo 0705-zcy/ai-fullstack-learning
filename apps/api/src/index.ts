@@ -20,6 +20,20 @@ const app = createApp({ db, config });
 const server = serve({ fetch: app.fetch, port: config.port }, (info) => {
   console.log(`[api] 服务已启动: http://localhost:${info.port}`);
   console.log(`[api] 数据库: ${config.dbPath}`);
+  console.log(
+    `[api] 注册策略: ${config.registrationMode}` +
+      (config.allowedEmails.length > 0 ? `（${config.allowedEmails.length} 个白名单邮箱）` : ''),
+  );
+
+  // 生产环境还开着公开注册，是「个人自用」场景下最容易忽略的风险：
+  // 这个项目没有邮箱验证和速率限制，任何人知道地址就能建号。
+  if (config.isProduction && config.registrationMode === 'open') {
+    console.warn(
+      '[api] ⚠️  注册当前对所有人开放，而本服务没有邮箱验证与速率限制。\n' +
+        '         个人自用建议设置 AIFS_REGISTRATION=closed，\n' +
+        '         或设置 AIFS_ALLOWED_EMAILS=you@example.com 只允许指定邮箱注册。',
+    );
+  }
 });
 
 /** 优雅退出：关掉连接再退出，避免 WAL 文件残留。 */

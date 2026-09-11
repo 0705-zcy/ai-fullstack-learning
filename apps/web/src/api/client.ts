@@ -1,5 +1,6 @@
 import type {
   ApiError,
+  AuthPolicy,
   DashboardSummary,
   Difficulty,
   LanguageCode,
@@ -138,6 +139,10 @@ export interface QuizSubmissionResult {
 
 export const api = {
   // ---- 账号 ----
+  /** 公开的认证策略：决定登录页要不要显示注册入口。 */
+  async getAuthPolicy() {
+    return request<AuthPolicy>('/auth/policy');
+  },
   async register(input: { email: string; password: string; displayName?: string }) {
     return request<{ user: User }>('/auth/register', {
       method: 'POST',

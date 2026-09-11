@@ -1,6 +1,7 @@
-import { useState, type FormEvent } from 'react';
+import { useEffect, useState, type FormEvent } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { ApiRequestError, DEMO_MODE } from '../api/index.js';
+import type { AuthPolicy } from '@aifs/shared';
+import { api, ApiRequestError, DEMO_MODE } from '../api/index.js';
 import { STAGES } from '@aifs/shared';
 import { DEMO_CREDENTIALS } from '../demo/mockApi.js';
 import { useAuth } from '../state/AuthContext.js';
@@ -23,6 +24,30 @@ export function LoginPage() {
   const [displayName, setDisplayName] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [policy, setPolicy] = useState<AuthPolicy | null>(null);
+
+  // 后端可能关闭了注册（个人自用部署），拿不到策略时按「可注册」处理，
+  // 免得一次网络抖动就把注册入口藏了
+  useEffect(() => {
+    let cancelled = false;
+    api
+      .getAuthPolicy()
+      .then((result) => {
+        if (!cancelled) setPolicy(result);
+      })
+      .catch(() => {
+        if (!cancelled) setPolicy(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const registrationOpen = policy?.registrationEnabled ?? true;
+  const isWhitelist = policy?.mode === 'whitelist';
+  // 关闭注册时把模式锁到登录，但不改 state —— 这样策略一变回来，
+  // 用户之前选的 tab 还在
+  const effectiveMode: Mode = registrationOpen ? mode : 'login';
 
   if (loading) {
     return <div className="grid min-h-full place-items-center text-sm text-slate-500">加载中…</div>;
@@ -39,7 +64,7 @@ export function LoginPage() {
     setSubmitting(true);
 
     try {
-      if (mode === 'register') {
+      if (effectiveMode === 'register') {
         await register(email, password, displayName.trim() || undefined);
       } else {
         await login(email, password);
@@ -85,13 +110,29 @@ export function LoginPage() {
       <section className="flex items-center justify-center px-4 py-16">
         <div className="w-full max-w-sm">
           <h2 className="text-2xl font-bold text-slate-900">
-            {mode === 'register' ? '创建账号，开始学习' : '欢迎回来'}
+            {effectiveMode === 'register' ? '创建账号，开始学习' : '欢迎回来'}
           </h2>
           <p className="mt-1 text-sm text-slate-500">
-            {mode === 'register'
+            {effectiveMode === 'register'
               ? '进度会保存在你的账号下，换设备也能接着学。'
-              : '登录后继续上次的进度。'}
+              : registrationOpen
+                ? '登录后继续上次的进度。'
+                : '登录后继续上次的进度。'}
           </p>
+
+          {!registrationOpen && (
+            <p className="mt-4 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs leading-relaxed text-slate-600">
+              <strong className="text-slate-700">本实例已关闭注册。</strong>
+              这是个人自用部署，只有已存在的账号能登录。
+            </p>
+          )}
+
+          {isWhitelist && effectiveMode === 'register' && (
+            <p className="mt-4 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-xs leading-relaxed text-slate-600">
+              本实例<strong className="text-slate-700">只允许指定邮箱注册</strong>。
+              如果你不在名单里，注册会被拒绝。
+            </p>
+          )}
 
           {DEMO_MODE && (
             <p className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900">
@@ -134,7 +175,7 @@ export function LoginPage() {
               />
             </div>
 
-            {mode === 'register' && (
+            {effectiveMode === 'register' && (
               <div>
                 <label htmlFor="displayName" className="block text-sm font-medium text-slate-700">
                   昵称 <span className="font-normal text-slate-400">（可选）</span>
@@ -162,23 +203,25 @@ export function LoginPage() {
               disabled={submitting}
               className="w-full rounded-lg bg-slate-900 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:opacity-60"
             >
-              {submitting ? '处理中…' : mode === 'register' ? '注册并开始' : '登录'}
+              {submitting ? '处理中…' : effectiveMode === 'register' ? '注册并开始' : '登录'}
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-slate-500">
-            {mode === 'register' ? '已经有账号了？' : '还没有账号？'}
-            <button
-              type="button"
-              onClick={() => {
-                setMode(mode === 'register' ? 'login' : 'register');
-                setError(null);
-              }}
-              className="ml-1 font-medium text-slate-900 underline underline-offset-2"
-            >
-              {mode === 'register' ? '去登录' : '去注册'}
-            </button>
-          </p>
+          {registrationOpen && (
+            <p className="mt-6 text-center text-sm text-slate-500">
+              {effectiveMode === 'register' ? '已经有账号了？' : '还没有账号？'}
+              <button
+                type="button"
+                onClick={() => {
+                  setMode(effectiveMode === 'register' ? 'login' : 'register');
+                  setError(null);
+                }}
+                className="ml-1 font-medium text-slate-900 underline underline-offset-2"
+              >
+                {effectiveMode === 'register' ? '去登录' : '去注册'}
+              </button>
+            </p>
+          )}
         </div>
       </section>
     </div>

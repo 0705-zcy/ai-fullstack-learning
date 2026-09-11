@@ -1,4 +1,6 @@
 import { resolve } from 'node:path';
+import type { RegistrationMode } from '@aifs/shared';
+import { parseAllowedEmails, resolveRegistrationMode } from './lib/registration.js';
 
 export interface AppConfig {
   port: number;
@@ -7,6 +9,10 @@ export interface AppConfig {
   isProduction: boolean;
   /** 允许跨域的前端地址（开发时 Vite 代理同源，一般用不到）。 */
   webOrigin: string;
+  /** 注册策略：open / closed / whitelist。 */
+  registrationMode: RegistrationMode;
+  /** 白名单邮箱（仅 whitelist 模式生效）。 */
+  allowedEmails: string[];
 }
 
 const DEV_SECRET = 'aifs-dev-secret-do-not-use-in-production';
@@ -31,12 +37,17 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     throw new Error(`AIFS_PORT 不是合法端口：${env.AIFS_PORT}`);
   }
 
+  const allowedEmails = parseAllowedEmails(env.AIFS_ALLOWED_EMAILS);
+  const registrationMode = resolveRegistrationMode(env.AIFS_REGISTRATION, allowedEmails);
+
   return {
     port,
     dbPath: env.AIFS_DB_PATH?.trim() || resolve(process.cwd(), 'data', 'aifs.db'),
     jwtSecret,
     isProduction,
     webOrigin: env.AIFS_WEB_ORIGIN?.trim() || 'http://localhost:5173',
+    registrationMode,
+    allowedEmails,
   };
 }
 

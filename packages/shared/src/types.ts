@@ -99,6 +99,24 @@ export interface User {
   createdAt: string;
 }
 
+/**
+ * 这个实例的注册策略。
+ *
+ * - `open`：任何人都能注册（默认，方便 clone 下来直接试）
+ * - `closed`：关闭注册，只有已存在的账号能登录（个人自用推荐）
+ * - `whitelist`：只有名单里的邮箱能注册
+ *
+ * 注意：一个用户都没有时永远放行 —— 否则配上 closed 就谁也进不来了。
+ */
+export type RegistrationMode = 'open' | 'closed' | 'whitelist';
+
+/** 后端下发的认证策略，前端据此决定要不要显示注册入口。 */
+export interface AuthPolicy {
+  mode: RegistrationMode;
+  /** 是否还能创建新账号（closed 时为 false）。 */
+  registrationEnabled: boolean;
+}
+
 /** 单条进度记录。 */
 export interface ProgressEntry {
   resourceId: string;

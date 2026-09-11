@@ -105,6 +105,55 @@ npm run build        # 构建 shared、api 与 web
 npm run seed         # 手动重灌种子数据（幂等，不会删掉已有进度）
 npm start            # 生产模式启动后端（需先 npm run build）
 npm run smoke        # 端到端冒烟测试（需后端已在运行）
+npm run smoke:locked # 「关闭注册」配置的冒烟测试（需以 AIFS_REGISTRATION=closed 启动）
+```
+
+## 只有我自己用
+
+**先说清楚一件事：代码公开 ≠ 服务公开。**
+
+仓库是公开的，但**没有任何服务器在跑**。别人 `git clone` 之后得到的是他们自己的一份，
+用的是他们自己的数据库 —— 你的账号、密码、学习进度从头到尾都没离开过你的机器。
+
+### 账号数据存在哪
+
+| | |
+| --- | --- |
+| **位置** | 后端进程工作目录下的 `data/aifs.db`（可用 `AIFS_DB_PATH` 改），一个 SQLite 文件 |
+| **内容** | `users` 表：邮箱、scrypt 密码哈希、昵称、注册时间；另有进度与自测记录 |
+| **是否在 GitHub 上** | **不在。** `data/` 与 `*.db` 都在 `.gitignore` 里，从未被提交过 |
+| **密码怎么存的** | 只存 scrypt 派生哈希（含随机盐），不存明文，也不可逆 |
+
+想确认的话：`git ls-files | Select-String "\.db"` 应该没有任何输出。
+
+### 关掉注册（推荐）
+
+这个项目**没有邮箱验证、没有找回密码、也没有速率限制**。所以如果哪天你把它部署到公网，
+默认配置下任何知道地址的人都能建号。个人自用请设置下面两项之一：
+
+```bash
+# 方式一：直接关闭注册（已有账号仍可正常登录）
+AIFS_REGISTRATION=closed
+
+# 方式二：只允许指定邮箱注册（逗号分隔，不区分大小写）
+AIFS_ALLOWED_EMAILS=you@example.com
+```
+
+设置后：
+- 登录页会自动隐藏注册入口，并提示「本实例已关闭注册」
+- 注册接口返回 403
+- **引导例外**：库里一个账号都没有时永远放行第一个注册 ——
+  否则配上 `closed` 的新部署会直接锁死，谁也进不来。所以顺序是：
+  先正常启动、注册你自己的账号，然后重启并加上 `AIFS_REGISTRATION=closed`
+- 生产环境（`NODE_ENV=production`）如果注册还开着，启动时会打印醒目警告
+
+验证这个配置是否真的生效：
+
+```bash
+# 终端 1
+AIFS_REGISTRATION=closed npm start
+# 终端 2
+npm run smoke:locked
 ```
 
 ## 环境变量
@@ -117,6 +166,8 @@ npm run smoke        # 端到端冒烟测试（需后端已在运行）
 | `AIFS_DB_PATH` | `./data/aifs.db` | SQLite 文件路径，可设为 `:memory:` |
 | `AIFS_JWT_SECRET` | 开发默认值 | **生产环境必须设置**，否则启动直接报错 |
 | `AIFS_WEB_ORIGIN` | `http://localhost:5173` | CORS 允许的前端来源 |
+| `AIFS_REGISTRATION` | `open` | 注册策略：`open` / `closed`（写错会启动失败） |
+| `AIFS_ALLOWED_EMAILS` | 空 | 白名单邮箱，逗号分隔。非空时强制按 `whitelist` 执行 |
 | `AIFS_API_TARGET` | `http://localhost:8787` | 仅前端 Vite 代理使用 |
 
 ## 目录结构

@@ -318,6 +318,11 @@ const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
  * 这是保证「演示模式和真实产品行为一致」的第一道防线。
  */
 export const mockApi: ApiClient = {
+  async getAuthPolicy() {
+    // 演示模式永远可注册：不然第一次打开的人根本进不去
+    return delay({ mode: 'open' as const, registrationEnabled: true });
+  },
+
   async register(input: { email: string; password: string; displayName?: string }) {
     const email = input.email.trim().toLowerCase();
 

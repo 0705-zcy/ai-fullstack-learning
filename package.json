@@ -25,6 +25,7 @@
     "test": "npm run build:shared && npm run test -w @aifs/shared && npm run test -w @aifs/api && npm run test -w @aifs/web",
     "typecheck": "npm run build:shared && npm run typecheck -w @aifs/api && npm run typecheck -w @aifs/web",
     "smoke": "node scripts/smoke.mjs",
+    "smoke:locked": "node scripts/smoke-locked.mjs",
     "seed": "npm run seed -w @aifs/api",
     "start": "npm run build:shared && npm run start -w @aifs/api"
   },

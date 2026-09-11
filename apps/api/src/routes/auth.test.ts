@@ -163,3 +163,135 @@ describe('POST /api/auth/logout', () => {
     expect(cookie.toLowerCase()).toContain('max-age=0');
   });
 });
+
+describe('GET /api/auth/policy', () => {
+  it('默认策略是开放注册', async () => {
+    const { app } = createTestContext();
+    const res = await jsonRequest(app, '/api/auth/policy');
+
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ mode: 'open', registrationEnabled: true });
+  });
+
+  it('关闭注册时 registrationEnabled 为 false', async () => {
+    const { app } = createTestContext({ config: { registrationMode: 'closed' } });
+    const body = (await (await jsonRequest(app, '/api/auth/policy')).json()) as {
+      mode: string;
+      registrationEnabled: boolean;
+    };
+
+    expect(body.mode).toBe('closed');
+    expect(body.registrationEnabled).toBe(false);
+  });
+
+  it('白名单模式如实下发', async () => {
+    const { app } = createTestContext({
+      config: { registrationMode: 'whitelist', allowedEmails: ['me@example.com'] },
+    });
+    const body = (await (await jsonRequest(app, '/api/auth/policy')).json()) as {
+      mode: string;
+      registrationEnabled: boolean;
+    };
+
+    expect(body.mode).toBe('whitelist');
+    // 白名单模式下注册入口仍然显示（只是提交时才校验）
+    expect(body.registrationEnabled).toBe(true);
+  });
+
+  it('策略接口不需要登录', async () => {
+    const { app } = createTestContext({ config: { registrationMode: 'closed' } });
+    expect((await jsonRequest(app, '/api/auth/policy')).status).toBe(200);
+  });
+});
+
+describe('注册开关', () => {
+  it('closed：库为空时放行第一个账号（引导例外）', async () => {
+    const { app } = createTestContext({ config: { registrationMode: 'closed' } });
+
+    const res = await jsonRequest(app, '/api/auth/register', {
+      method: 'POST',
+      body: { email: 'owner@example.com', password: PASSWORD },
+    });
+
+    expect(res.status).toBe(201);
+  });
+
+  it('closed：已有账号后拒绝新注册，并返回 403', async () => {
+    const { app } = createTestContext({ config: { registrationMode: 'closed' } });
+    await signUp(app, 'owner@example.com', PASSWORD);
+
+    const res = await jsonRequest(app, '/api/auth/register', {
+      method: 'POST',
+      body: { email: 'stranger@example.com', password: PASSWORD },
+    });
+
+    expect(res.status).toBe(403);
+    const body = (await res.json()) as { error: { code: string; message: string } };
+    expect(body.error.code).toBe('forbidden');
+    expect(body.error.message).toContain('关闭注册');
+  });
+
+  it('closed：已存在的账号仍然能正常登录', async () => {
+    const { app } = createTestContext({ config: { registrationMode: 'closed' } });
+    await signUp(app, 'owner@example.com', PASSWORD);
+
+    const res = await jsonRequest(app, '/api/auth/login', {
+      method: 'POST',
+      body: { email: 'owner@example.com', password: PASSWORD },
+    });
+
+    expect(res.status).toBe(200);
+  });
+
+  it('whitelist：名单内可注册，名单外 403', async () => {
+    const { app } = createTestContext({
+      config: { registrationMode: 'whitelist', allowedEmails: ['me@example.com'] },
+    });
+
+    // 引导例外先建一个不在名单里的账号
+    await signUp(app, 'bootstrap@example.com', PASSWORD);
+
+    const allowed = await jsonRequest(app, '/api/auth/register', {
+      method: 'POST',
+      body: { email: 'me@example.com', password: PASSWORD },
+    });
+    expect(allowed.status).toBe(201);
+
+    const blocked = await jsonRequest(app, '/api/auth/register', {
+      method: 'POST',
+      body: { email: 'stranger@example.com', password: PASSWORD },
+    });
+    expect(blocked.status).toBe(403);
+  });
+
+  it('open：不受影响，任何人可注册', async () => {
+    const { app } = createTestContext();
+    await signUp(app, 'first@example.com', PASSWORD);
+
+    const res = await jsonRequest(app, '/api/auth/register', {
+      method: 'POST',
+      body: { email: 'second@example.com', password: PASSWORD },
+    });
+
+    expect(res.status).toBe(201);
+  });
+
+  it('被拒绝时不会泄漏邮箱是否已存在（先判权限再查重）', async () => {
+    const { app } = createTestContext({ config: { registrationMode: 'closed' } });
+    await signUp(app, 'owner@example.com', PASSWORD);
+
+    // 用已存在的邮箱去注册，也应该拿到 403（关闭）而不是 409（已注册）
+    const existing = await jsonRequest(app, '/api/auth/register', {
+      method: 'POST',
+      body: { email: 'owner@example.com', password: PASSWORD },
+    });
+    const fresh = await jsonRequest(app, '/api/auth/register', {
+      method: 'POST',
+      body: { email: 'brand-new@example.com', password: PASSWORD },
+    });
+
+    expect(existing.status).toBe(403);
+    expect(fresh.status).toBe(403);
+    expect(await existing.json()).toEqual(await fresh.json());
+  });
+});

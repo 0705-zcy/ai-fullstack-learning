@@ -43,6 +43,12 @@ export function findUserById(db: Db, id: string): User | null {
   return row ? toUser(row) : null;
 }
 
+/** 已注册用户数。用于判断是不是首次部署（决定注册引导例外是否生效）。 */
+export function countUsers(db: Db): number {
+  const row = db.prepare('SELECT COUNT(*) AS n FROM users').get() as { n: number } | undefined;
+  return Number(row?.n ?? 0);
+}
+
 /** 创建用户。邮箱重复会抛错，调用方应先查重。 */
 export function createUser(
   db: Db,

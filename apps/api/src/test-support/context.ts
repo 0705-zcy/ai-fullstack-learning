@@ -22,6 +22,8 @@ export function createTestConfig(overrides: Partial<AppConfig> = {}): AppConfig 
     jwtSecret: 'test-secret-do-not-use-anywhere-else',
     isProduction: false,
     webOrigin: 'http://localhost:5173',
+    registrationMode: 'open',
+    allowedEmails: [],
     ...overrides,
   };
 }
@@ -93,9 +95,11 @@ export interface TestContext {
   config: AppConfig;
 }
 
-export function createTestContext(options: { resources?: Resource[]; withQuiz?: boolean } = {}): TestContext {
+export function createTestContext(
+  options: { resources?: Resource[]; withQuiz?: boolean; config?: Partial<AppConfig> } = {},
+): TestContext {
   const db = openDatabase(':memory:');
-  const config = createTestConfig();
+  const config = createTestConfig(options.config);
 
   for (const resource of options.resources ?? createFixtureResources()) {
     upsertResource(db, resource);
