@@ -19,6 +19,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 12,
     topics: ['typescript', 'programming-basics'],
     stage: 'foundation',
+    scope: 'supplement',
     description:
       '中文里少见的、能把类型系统讲透的系统教程：从基础类型、interface、泛型一路讲到装饰器、类型工具和 tsconfig。适合已经会写 JS 但没系统学过 TS 的人。',
     notes: '全文免费在线阅读，无需注册，采用 CC BY-SA 3.0 协议。',
@@ -35,6 +36,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 20,
     topics: ['react', 'frontend', 'javascript', 'jsx'],
     stage: 'foundation',
+    scope: 'supplement',
     description:
       'React 官方文档的中文版学习章节，用「井字棋」教程加四大板块（描述 UI、添加交互、状态管理、脱围机制）带你上手。页面内嵌可运行的在线示例。',
     notes: '完全免费、无登录要求；官方维护的中文翻译，内容与英文版同步。',
@@ -51,6 +53,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 15,
     topics: ['nodejs', 'http', 'api', 'command-line', 'async'],
     stage: 'foundation',
+    scope: 'supplement',
     description:
       'Node.js 官方 Learn 文档的中文译本，覆盖命令行运行脚本、HTTP 事务结构与服务器、文件系统、事件循环与异步、测试与安全实践。做后端 API 前值得先过一遍。',
     notes: '全文免费、无需注册。nodejs.cn 是社区维护的中文镜像站，非 nodejs.org 官方域名。',
@@ -67,6 +70,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 10,
     topics: ['git', 'version-control', 'command-line'],
     stage: 'foundation',
+    scope: 'supplement',
     description:
       'Git 官方推荐的《Pro Git》简体中文完整译本。分支模型和分布式工作流这两章尤其值得精读——出问题时能不能把历史救回来，全看这里。',
     notes: '全文免费在线阅读，并提供免费 PDF/ePub 下载，无需登录。',
@@ -83,9 +87,28 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 8,
     topics: ['sql', 'database', 'mysql', 'data-modeling'],
     stage: 'foundation',
+    scope: 'supplement',
     description:
       '从 SELECT / WHERE / ORDER BY / JOIN 到约束、索引、视图与聚合函数的系统入门，每节配可在网页里直接运行的实例和自测题，适合零基础把查询写顺手。',
     notes: '全文免费直接阅读，无需注册；页面有广告但不影响正文。',
+    verified: true,
+  },
+
+  {
+    id: 'zh-javascript-info',
+    title: '现代 JavaScript 教程',
+    url: 'https://zh.javascript.info/',
+    provider: 'javascript-tutorial（开源社区）',
+    language: 'zh',
+    difficulty: 'beginner',
+    format: 'interactive',
+    durationHours: 40,
+    topics: ['javascript', 'programming-basics', 'frontend', 'async', 'dom'],
+    stage: 'foundation',
+    scope: 'curriculum',
+    description:
+      '从语言基础、浏览器 DOM 一路讲到异步、模块与网络请求，每节都配可在线运行的任务和测验——中文里少见的「真的有练习可做」的 JS 教程。学完能独立写出带交互的网页应用。',
+    notes: '全文免费，是 The Modern JavaScript Tutorial 的官方中文翻译，采用 CC BY-NC-SA 4.0。',
     verified: true,
   },
 
@@ -101,6 +124,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 8,
     topics: ['llm-api', 'function-calling', 'structured-output', 'streaming', 'token-usage'],
     stage: 'llm-core',
+    scope: 'supplement',
     description:
       '中文第一手 API 文档：首次调用、多轮对话、流式输出、JSON Output、Tool Calls、上下文硬盘缓存、Token 用量与限速、错误码。兼容 OpenAI 协议，学完可平移到其他厂商。',
     notes: '文档全文免费、无需登录；实际调用 API 按 Token 计费，需注册并充值。',
@@ -117,6 +141,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 3,
     topics: ['llm-api', 'sdk', 'api-key-management', 'streaming'],
     stage: 'llm-core',
+    scope: 'supplement',
     description:
       '手把手讲开通、创建 API Key、配置环境变量，以及用 OpenAI 兼容接口、DashScope SDK、curl 三种方式调用模型。适合第一次把 LLM API 接进自己代码的人。',
     notes: '文档免费阅读；需注册阿里云账号并开通百炼才能实际调用，新用户有免费额度。',
@@ -133,6 +158,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 10,
     topics: ['prompt-engineering', 'chain-of-thought', 'react', 'function-calling', 'rag'],
     stage: 'llm-core',
+    scope: 'supplement',
     description:
       '提示工程的系统性参考：零样本/少样本、CoT、自我一致性、ToT、ReAct、Reflexion、RAG、Function Calling，还有对抗性提示（提示注入）这一章。',
     notes: '正文全文免费在线阅读，无需注册；页面顶部有第三方付费课程广告，与免费正文无关。',
@@ -149,9 +175,59 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 18,
     topics: ['prompt-engineering', 'llm-api', 'langchain', 'rag', 'llm-evaluation'],
     stage: 'llm-core',
+    scope: 'curriculum',
     description:
       '把吴恩达的大模型系列短课筛翻译并复现成中文：从 Prompt Engineering 到基于 API 搭问答系统、用 LangChain 开发应用与访问个人数据。适合边看边跑。',
     notes: '按 CC BY-NC-SA 4.0 完全免费开放，含免费 PDF 与双语字幕视频；需自备 LLM API Key 才能跑通代码。',
+    verified: true,
+  },
+
+  {
+    id: 'zh-happy-llm',
+    title: 'Happy-LLM：从零开始的大语言模型原理与实践',
+    url: 'https://github.com/datawhalechina/happy-llm',
+    provider: 'Datawhale',
+    language: 'zh',
+    difficulty: 'advanced',
+    format: 'docs',
+    durationHours: 40,
+    topics: [
+      'llm-internals',
+      'transformer',
+      'pretraining',
+      'sft',
+      'lora',
+      'agentic-rl',
+    ],
+    stage: 'llm-core',
+    scope: 'curriculum',
+    description:
+      '把「模型是怎么来的」讲透：Transformer 架构、预训练、SFT 与 LoRA 微调，一路讲到 Agentic-RL，配可运行的代码与习题。没有它，对 LLM 的认知会停在「会调 API」这一层。',
+    notes: '开源免费（CC BY-NC-SA 4.0），含免费 PDF；代码需 clone 仓库运行。',
+    verified: true,
+  },
+  {
+    id: 'zh-tiny-universe',
+    title: 'Tiny-Universe：大模型白盒子构建指南',
+    url: 'https://github.com/datawhalechina/tiny-universe',
+    provider: 'Datawhale',
+    language: 'zh',
+    difficulty: 'advanced',
+    format: 'docs',
+    durationHours: 30,
+    topics: [
+      'llm-internals',
+      'hand-written',
+      'rag',
+      'agent',
+      'llm-evaluation',
+      'tinyeval',
+    ],
+    stage: 'llm-core',
+    scope: 'curriculum',
+    description:
+      '强调「不调 API、全部手搓」：自己实现 Transformer、RAG、Agent 与评测框架 TinyEval。仅需 2G 显存就能跑通，是排障能力与「知其所以然」的来源——出了问题知道该往哪一层查。',
+    notes: '开源免费；需 clone 仓库运行，建议有 GPU（2G 显存即可）。',
     verified: true,
   },
 
@@ -175,6 +251,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
       'rag-evaluation',
     ],
     stage: 'rag',
+    scope: 'curriculum',
     description:
       'RAG 的中文全栈教程：数据加载与文本切分、向量嵌入与向量库、索引优化、混合检索、查询改写与 RAG 系统评估，最后有端到端项目。是目前中文里覆盖最完整的一份。',
     notes: '开源免费（CC BY-NC-SA 4.0），无需注册；在线站点为前端渲染，正文需在浏览器中查看。',
@@ -191,6 +268,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 20,
     topics: ['rag', 'text-chunking', 'embedding', 'hybrid-search', 'reranking', 'query-rewriting'],
     stage: 'rag',
+    scope: 'curriculum',
     description:
       '刻意不用 LangChain，手写文本切分、向量检索、BM25 混合检索、Cross-Encoder 重排和 Query 改写。还配了「条款被切散」「该召回的没召回」这类可复现的失败演练，是理解 RAG 内部机制的好材料。',
     notes: 'MIT 协议完全免费开源，无需注册。需自行 clone 仓库运行。',
@@ -207,6 +285,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 4,
     topics: ['rag', 'knowledge-base', 'text-chunking', 'retrieval'],
     stage: 'rag',
+    scope: 'supplement',
     description:
       '托管平台的官方 RAG 文档：文档导入、智能切分策略、向量索引构建、TopK 与相似度阈值调参、命中测试。想快速看清 RAG 链路上每个环节在做什么，这份最省时间。',
     notes: '文档免费阅读，无需登录；使用知识库能力需开通百炼并按量计费，新用户有免费额度。',
@@ -223,6 +302,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 3,
     topics: ['rag', 'vector-database', 'reranking', 'hybrid-search', 'metadata-filtering'],
     stage: 'rag',
+    scope: 'supplement',
     description:
       '一篇从零到上线的 RAG 实战长文，重点在工程细节：为什么需要 RAG、系统架构与技术选型、文档切分入库、问答链构建，以及 Rerank 重排、元数据过滤、混合检索等优化点。',
     notes: '文章全文免费阅读，无需登录即可查看正文。',
@@ -241,6 +321,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 30,
     topics: ['agent', 'react', 'planning', 'multi-agent', 'memory', 'mcp', 'agent-evaluation'],
     stage: 'agent',
+    scope: 'curriculum',
     description:
       '手写 ReAct、Plan-and-Solve、Reflection 等经典范式并自建 Agent 框架，深入记忆与检索、上下文工程、MCP 协议、智能体性能评估，最后以综合项目收尾。中文智能体教程里最系统的一份。',
     notes: '完全免费开源，含免费 PDF，无需注册；在线站点为前端渲染，正文需在浏览器中查看。',
@@ -257,6 +338,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 12,
     topics: ['agent', 'tool-calling', 'workflow-orchestration', 'memory', 'human-in-the-loop'],
     stage: 'agent',
+    scope: 'supplement',
     description:
       '讲怎么用图编排构建长时间运行的有状态智能体：持久化执行、流式传输、中断与人机协作、状态回溯、内存与子图、部署与可观察性。想做可控的 agent 循环而不是一个大 while，值得读。',
     notes: '文档全文免费阅读，无需登录；社区维护的中文本地化站点，部分页面会提示跳转英文官方文档。',
@@ -273,6 +355,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 10,
     topics: ['agent', 'workflow', 'knowledge-base', 'tool-calling', 'mcp', 'llm-observability'],
     stage: 'agent',
+    scope: 'supplement',
     description:
       '开源 LLM 应用平台的官方中文文档：Agent 与工作流编排、知识库、工具与 MCP 集成、日志与标注。适合低代码先把一个能用的智能体跑起来，再回头看它内部怎么实现。',
     notes:
@@ -290,9 +373,37 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 5,
     topics: ['agent', 'tool-calling', 'prompt-engineering', 'rag', 'memory'],
     stage: 'agent',
+    scope: 'supplement',
     description:
       '官方文档讲清智能体的三个关键设计：系统提示词如何定义角色、行为边界与工具使用时机；知识库与插件/MCP 如何挂载；长期记忆与版本如何管理并发布成 API。',
     notes: '文档免费阅读，无需登录；实际问答按模型 Token 计费，新用户有免费额度。',
+    verified: true,
+  },
+
+  {
+    id: 'zh-self-llm',
+    title: 'Self-LLM：开源大模型食用指南',
+    url: 'https://github.com/datawhalechina/self-llm',
+    provider: 'Datawhale',
+    language: 'zh',
+    difficulty: 'advanced',
+    format: 'docs',
+    durationHours: 50,
+    topics: [
+      'deployment',
+      'vllm',
+      'ollama',
+      'fine-tuning',
+      'lora',
+      'qlora',
+      'serving',
+      'model-evaluation',
+    ],
+    stage: 'engineering',
+    scope: 'curriculum',
+    description:
+      '覆盖 50+ 开源模型的环境配置与部署（vLLM、SGLang、Ollama、llama.cpp）、全量微调与 LoRA/QLoRA，以及服务化之后的性能与精度测试。中文里模型侧工程最完整的一条路。',
+    notes: 'Apache-2.0 授权，是中文清单里少数明确可商用的资源；开源免费，需自备 GPU 环境。',
     verified: true,
   },
 
@@ -308,6 +419,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 5,
     topics: ['llm-evaluation', 'llm-as-a-judge', 'rouge', 'bleu', 'baseline-benchmark'],
     stage: 'engineering',
+    scope: 'supplement',
     description:
       '系统讲 LLM 评测工程：自定义评测与基线评测的区别、三类评分器（LLM-as-a-judge / 规则评分 / 人工评分）、评测数据集规模建议与成本优化。想做上线前的评估体系，从这里入手。',
     notes: '文档免费阅读；执行评测按推理与评分 Token 计费，可导入已有推理结果避免重复计费。',
@@ -324,6 +436,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 6,
     topics: ['llm-observability', 'tracing', 'cost-tracking', 'llm-evaluation', 'prompt-management'],
     stage: 'engineering',
+    scope: 'supplement',
     description:
       'LLM 应用的追踪（Trace）、成本与延迟监控、LLM-as-a-judge 与人工标注评估、提示管理与 A/B 测试，以及与 LangChain、DeepSeek、Dify 的集成方式。',
     notes: '中文页免费阅读；平台开源可自托管免费使用，云版有免费额度、超出后按用量计费。',
@@ -340,6 +453,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 12,
     topics: ['observability', 'tracing', 'metrics', 'logging', 'deployment'],
     stage: 'engineering',
+    scope: 'supplement',
     description:
       '可观测性三大信号（Trace / Metrics / Logs）、上下文传播、自动与手动插桩、Collector、采样策略。给 LLM 服务做统一追踪与告警的行业标准读物。',
     notes: '文档全文免费开放，CC BY 4.0，无需注册；含 JavaScript / Node.js 的完整入门章节。',
@@ -356,6 +470,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 2,
     topics: ['prompt-injection', 'llm-security', 'api-key-management', 'input-validation'],
     stage: 'engineering',
+    scope: 'supplement',
     description:
       '面向生产环境的中文安全实践长文，讨论把大模型接入客服、代码审查、知识问答时最容易被低估的风险：密钥保护、输入输出边界、提示注入防护。适合上线前做一次安全评审。',
     notes: '文章全文免费阅读，无需登录即可查看正文。',
@@ -374,6 +489,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 15,
     topics: ['capstone', 'rag', 'llm-api', 'langchain', 'streamlit', 'llm-evaluation'],
     stage: 'capstone',
+    scope: 'curriculum',
     description:
       '以「个人知识库助手」为交付目标的完整项目课程：多厂商 API 统一封装、文档处理与向量库搭建、检索问答链、Streamlit 部署、系统评估与优化。学完手上就有一个能跑、能讲的作品。',
     notes: '开源免费，含免费 PDF，无需注册；运行项目需自备 LLM API Key，不需要 GPU。',
@@ -390,6 +506,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 2,
     topics: ['capstone', 'rag', 'knowledge-base', 'agent', 'prompt-engineering'],
     stage: 'capstone',
+    scope: 'supplement',
     description:
       '端到端最短路径：创建智能体、设计 System Prompt、上传私有文档建知识库、切分与索引、挂载检索、测试并发布。拿它当毕业项目的「最小可用版本」基准，再自己动手实现一遍。',
     notes: '教程免费阅读、无需付费即可跟做；需注册阿里云账号并开通百炼，模型调用产生 Token 费用。',
@@ -406,6 +523,7 @@ export const ZH_RESOURCES: readonly Resource[] = [
     durationHours: 1,
     topics: ['capstone', 'agent', 'rag', 'knowledge-base', 'api-integration'],
     stage: 'capstone',
+    scope: 'supplement',
     description:
       '一段实战视频：用通义千问与百炼从零搭出一个法律咨询 Agent，创建应用、配置知识库、上传民法典文档建索引、测试问答，最后通过 API 集成到既有系统。适合当第一个完整交付型练手项目。',
     notes: '视频与图文在阿里云开发者社区免费公开，无付费墙、无需登录即可观看；实操需开通百炼。',

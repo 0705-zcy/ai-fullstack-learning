@@ -23,6 +23,19 @@ export type ResourceFormat = 'video' | 'docs' | 'interactive' | 'course';
 /** 资源语言。 */
 export type LanguageCode = 'en' | 'zh';
 
+/**
+ * 资源的「覆盖范围」——回答「学完这个我能不能真的学会」。
+ *
+ * - `curriculum`：**完整体系课**。从入门一路讲到能独立做出可运行的项目，
+ *   有练习/作业/项目等动手环节，学完有可验证的产物。
+ * - `supplement`：**单点补充**。官方文档、短课、专题文章，
+ *   用来查漏补缺或深入某个具体问题，单独学完不足以掌握整个主题。
+ *
+ * 这个字段是产品的一等公民：用户最常见的诉求是「给我一条能走完的路」，
+ * 而不是「给我一堆资料」。
+ */
+export type ResourceScope = 'curriculum' | 'supplement';
+
 /** 用户对某个资源的学习状态。 */
 export type ProgressStatus = 'wishlist' | 'learning' | 'completed';
 
@@ -39,6 +52,8 @@ export interface Resource {
   durationHours: number;
   topics: string[];
   stage: StageId;
+  /** 覆盖范围：完整体系课 or 单点补充。 */
+  scope: ResourceScope;
   /** 一句话中文说明：讲什么、适合谁。 */
   description: string;
   /** 免费范围 / 获取门槛说明。 */

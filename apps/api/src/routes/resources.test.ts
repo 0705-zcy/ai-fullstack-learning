@@ -7,14 +7,24 @@ import {
 } from '../test-support/context.js';
 
 interface ListBody {
-  items: Array<{ id: string; stage: string; language: string; durationHours: number; topics: string[] }>;
+  items: Array<{
+    id: string;
+    stage: string;
+    language: string;
+    difficulty: string;
+    durationHours: number;
+    scope: string;
+    topics: string[];
+  }>;
   total: number;
   facets: {
     total: number;
-    stages: Array<{ id: string; title: string; count: number }>;
+    curriculumCount: number;
+    stages: Array<{ id: string; title: string; count: number; curriculumCount: number }>;
     languages: Array<{ value: string; count: number }>;
     difficulties: Array<{ value: string; count: number }>;
     formats: Array<{ value: string; count: number }>;
+    scopes: Array<{ value: string; count: number }>;
     topics: string[];
   };
 }
@@ -34,10 +44,13 @@ describe('GET /api/resources', () => {
     const ctx = createTestContext();
     const body = (await (await list(ctx)).json()) as ListBody;
 
-    expect(body.total).toBe(12);
-    expect(body.facets.total).toBe(12);
+    expect(body.total).toBe(18);
+    expect(body.facets.total).toBe(18);
     expect(body.facets.stages).toHaveLength(6);
-    expect(body.facets.stages.every((s) => s.count === 2)).toBe(true);
+    expect(body.facets.stages.every((s) => s.count === 3)).toBe(true);
+    // 每阶段两门体系课：这是「每个阶段都有得选」这条产品规则的机器化表达
+    expect(body.facets.stages.every((s) => s.curriculumCount === 2)).toBe(true);
+    expect(body.facets.curriculumCount).toBe(12);
     expect(body.facets.languages.map((l) => l.value).sort()).toEqual(['en', 'zh']);
     expect(body.facets.topics).toContain('testing');
   });
@@ -46,10 +59,43 @@ describe('GET /api/resources', () => {
     const ctx = createTestContext();
     const body = (await (await list(ctx, '?stage=rag')).json()) as ListBody;
 
-    expect(body.total).toBe(2);
+    expect(body.total).toBe(3);
     expect(body.items.every((r) => r.stage === 'rag')).toBe(true);
     // facets 是全量统计，不受筛选影响，这样筛选器选项不会被筛没
-    expect(body.facets.total).toBe(12);
+    expect(body.facets.total).toBe(18);
+  });
+
+  it('可按覆盖范围筛选：完整体系课 vs 单点补充', async () => {
+    const ctx = createTestContext();
+
+    const curriculum = (await (await list(ctx, '?scope=curriculum')).json()) as ListBody;
+    expect(curriculum.total).toBe(12);
+    expect(curriculum.items.every((r) => r.scope === 'curriculum')).toBe(true);
+
+    const supplement = (await (await list(ctx, '?scope=supplement')).json()) as ListBody;
+    expect(supplement.total).toBe(6);
+    expect(supplement.items.every((r) => r.scope === 'supplement')).toBe(true);
+
+    // 两个范围加起来必须是全集，不能有资源两边都不属于
+    expect(curriculum.total + supplement.total).toBe(18);
+
+    expect((await list(ctx, '?scope=whatever')).status).toBe(400);
+  });
+
+  it('默认排序把完整体系课排在同一阶段的前面', async () => {
+    const ctx = createTestContext();
+    const body = (await (await list(ctx)).json()) as ListBody;
+
+    // 每个阶段内部应该是「两门体系课在前、单点补充在后」
+    for (const stage of ['foundation', 'rag', 'capstone']) {
+      const inStage = body.items.filter((r) => r.stage === stage);
+      const scopes = inStage.map((r) => r.scope);
+      expect(scopes, `${stage} 阶段的排序应把体系课排在前面`).toEqual([
+        'curriculum',
+        'curriculum',
+        'supplement',
+      ]);
+    }
   });
 
   it('可按语言与难度筛选', async () => {
@@ -79,7 +125,7 @@ describe('GET /api/resources', () => {
     expect(byTitle.items[0]?.id).toBe('rag-a');
 
     const byTopic = (await (await list(ctx, '?q=testing')).json()) as ListBody;
-    expect(byTopic.total).toBe(12);
+    expect(byTopic.total).toBe(18);
   });
 
   it('关键词里的 SQL 通配符不会造成意外匹配', async () => {
@@ -112,7 +158,7 @@ describe('GET /api/resources', () => {
     expect(res.status).toBe(200);
 
     const body = (await res.json()) as ListBody;
-    expect(body.total).toBe(12);
+    expect(body.total).toBe(18);
   });
 });
 

@@ -12,6 +12,7 @@ import {
   type QuizAttempt,
   type QuizQuestion,
   type Resource,
+  type ResourceScope,
   type Stage,
   type StageId,
   type User,
@@ -169,12 +170,18 @@ const DIFFICULTY_ORDER: Record<Difficulty, number> = {
   intermediate: 2,
   advanced: 3,
 };
+/** 完整体系课排在单点补充之前，与服务端默认排序一致。 */
+const SCOPE_ORDER: Record<ResourceScope, number> = {
+  curriculum: 0,
+  supplement: 1,
+};
 
 function matchesQuery(resource: Resource, query: ResourceQuery): boolean {
   if (query.stage && resource.stage !== query.stage) return false;
   if (query.language && resource.language !== query.language) return false;
   if (query.difficulty && resource.difficulty !== query.difficulty) return false;
   if (query.format && resource.format !== query.format) return false;
+  if (query.scope && resource.scope !== query.scope) return false;
   if (typeof query.maxHours === 'number' && query.maxHours > 0) {
     if (resource.durationHours > query.maxHours) return false;
   }
@@ -206,10 +213,11 @@ function sortResources(items: Resource[], sort: ResourceQuery['sort']): Resource
     case 'title':
       return copy.sort((a, b) => a.title.localeCompare(b.title));
     default:
-      // 与服务端一致：阶段顺序 → 难度 → 时长
+      // 与服务端一致：阶段顺序 → 完整体系课优先 → 难度 → 时长
       return copy.sort(
         (a, b) =>
           (STAGE_ORDER.get(a.stage) ?? 99) - (STAGE_ORDER.get(b.stage) ?? 99) ||
+          SCOPE_ORDER[a.scope] - SCOPE_ORDER[b.scope] ||
           DIFFICULTY_ORDER[a.difficulty] - DIFFICULTY_ORDER[b.difficulty] ||
           a.durationHours - b.durationHours,
       );
@@ -233,14 +241,18 @@ function buildFacets(): ResourceFacets {
 
   return {
     total: RESOURCES.length,
+    curriculumCount: RESOURCES.filter((r) => r.scope === 'curriculum').length,
     stages: STAGES.map((stage) => ({
       id: stage.id,
       title: stage.title,
       count: RESOURCES.filter((r) => r.stage === stage.id).length,
+      curriculumCount: RESOURCES.filter((r) => r.stage === stage.id && r.scope === 'curriculum')
+        .length,
     })),
     languages: count((r) => r.language),
     difficulties: count((r) => r.difficulty),
     formats: count((r) => r.format),
+    scopes: count((r) => r.scope),
     topics: [...topics].sort((a, b) => a.localeCompare(b)),
   };
 }

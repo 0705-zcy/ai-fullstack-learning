@@ -180,7 +180,7 @@ describe('GET /api/dashboard', () => {
     expect(body.stages[0]?.unlocked).toBe(true);
     expect(body.stages[0]?.completed).toBe(false);
     expect(body.stages[1]?.unlocked).toBe(false);
-    expect(body.overall.totalResources).toBe(12);
+    expect(body.overall.totalResources).toBe(18);
     expect(body.overall.completion).toBe(0);
     expect(body.overall.completedStages).toBe(0);
     expect(body.currentStage).toBe('foundation');
@@ -203,7 +203,7 @@ describe('GET /api/dashboard', () => {
     const ctx = createTestContext();
     const session = await signUp(ctx.app);
 
-    for (const resourceId of ['foundation-a', 'foundation-b']) {
+    for (const resourceId of ['foundation-a', 'foundation-b', 'foundation-c']) {
       await jsonRequest(ctx.app, '/api/progress', {
         method: 'PUT',
         cookie: session.cookie,
@@ -218,7 +218,7 @@ describe('GET /api/dashboard', () => {
       body: { stage: 'foundation', answers: bank.map((q) => ({ questionId: q.id, optionIndex: q.answerIndex })) },
     });
 
-    // foundation-a 是 2h，foundation-b 是 8h
+    // foundation-a 是 2h，foundation-b 是 8h，foundation-c 是 12h
     const res = await jsonRequest(ctx.app, '/api/dashboard', { cookie: session.cookie });
     const body = (await res.json()) as DashboardBody;
 
@@ -229,7 +229,7 @@ describe('GET /api/dashboard', () => {
     expect(body.stages[1]?.unlocked).toBe(true);
     expect(body.currentStage).toBe('llm-core');
     expect(body.overall.completedStages).toBe(1);
-    expect(body.overall.estimatedHoursSpent).toBe(10);
+    expect(body.overall.estimatedHoursSpent).toBe(22);
   });
 
   it('continueLearning 会推荐最近标记为「在学」的资源', async () => {
@@ -300,7 +300,7 @@ describe('通用行为', () => {
       quizTotal: number;
     };
     expect(detail.stage.id).toBe('rag');
-    expect(detail.resources).toHaveLength(2);
+    expect(detail.resources).toHaveLength(3);
     expect(detail.quizTotal).toBeGreaterThan(0);
   });
 });

@@ -8,6 +8,7 @@ import type {
   QuizAttempt,
   Resource,
   ResourceFormat,
+  ResourceScope,
   Stage,
   StageId,
   User,
@@ -73,6 +74,7 @@ export interface ResourceQuery {
   language?: LanguageCode | '';
   difficulty?: Difficulty | '';
   format?: ResourceFormat | '';
+  scope?: ResourceScope | '';
   q?: string;
   maxHours?: number | '';
   sort?: 'default' | 'duration-asc' | 'duration-desc' | 'title';
@@ -80,10 +82,13 @@ export interface ResourceQuery {
 
 export interface ResourceFacets {
   total: number;
-  stages: Array<{ id: StageId; title: string; count: number }>;
+  /** 全站的完整体系课数量，用于在筛选器上显示「能完整学会的有几门」。 */
+  curriculumCount: number;
+  stages: Array<{ id: StageId; title: string; count: number; curriculumCount: number }>;
   languages: Array<{ value: LanguageCode; count: number }>;
   difficulties: Array<{ value: Difficulty; count: number }>;
   formats: Array<{ value: ResourceFormat; count: number }>;
+  scopes: Array<{ value: ResourceScope; count: number }>;
   topics: string[];
 }
 
@@ -95,6 +100,7 @@ export function toQueryString(query: ResourceQuery): string {
   if (query.language) params.set('language', query.language);
   if (query.difficulty) params.set('difficulty', query.difficulty);
   if (query.format) params.set('format', query.format);
+  if (query.scope) params.set('scope', query.scope);
   if (query.q?.trim()) params.set('q', query.q.trim());
   if (typeof query.maxHours === 'number' && query.maxHours > 0) {
     params.set('maxHours', String(query.maxHours));

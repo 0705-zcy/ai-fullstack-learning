@@ -38,7 +38,7 @@ beforeEach(() => {
 
 describe('演示数据', () => {
   it('来自真实种子数据，规模与后端一致', () => {
-    expect(demoMeta.resourceCount).toBe(48);
+    expect(demoMeta.resourceCount).toBe(66);
     expect(demoMeta.questionCount).toBe(36);
   });
 
@@ -46,6 +46,15 @@ describe('演示数据', () => {
     for (const stage of STAGES) {
       expect(demoData.resources.filter((r) => r.stage === stage.id).length).toBeGreaterThanOrEqual(2);
       expect(demoData.questions.filter((q) => q.stage === stage.id).length).toBeGreaterThanOrEqual(5);
+    }
+  });
+
+  it('每个阶段都有至少两门完整体系课（与后端校验规则一致）', () => {
+    for (const stage of STAGES) {
+      const curriculum = demoData.resources.filter(
+        (r) => r.stage === stage.id && r.scope === 'curriculum',
+      ).length;
+      expect(curriculum, `阶段 ${stage.id} 的体系课不足`).toBeGreaterThanOrEqual(2);
     }
   });
 });
@@ -110,12 +119,34 @@ describe('鉴权', () => {
 describe('资源库', () => {
   beforeEach(login);
 
-  it('返回全部 48 个资源，并按学习路径排序', async () => {
+  it('返回全部资源，并按学习路径排序', async () => {
     const { total, items } = await mockApi.listResources({});
 
-    expect(total).toBe(48);
+    expect(total).toBe(66);
     expect(items[0]?.stage).toBe('foundation');
     expect(items[items.length - 1]?.stage).toBe('capstone');
+  });
+
+  it('默认排序把完整体系课排在同一阶段的前面', async () => {
+    const { items } = await mockApi.listResources({});
+    const foundation = items.filter((r) => r.stage === 'foundation');
+
+    expect(foundation.length).toBeGreaterThan(3);
+    // 前几项应该是体系课，最后应该是单点补充
+    expect(foundation.slice(0, 3).every((r) => r.scope === 'curriculum')).toBe(true);
+    expect(foundation[foundation.length - 1]?.scope).toBe('supplement');
+  });
+
+  it('可按覆盖范围筛选', async () => {
+    const curriculum = await mockApi.listResources({ scope: 'curriculum' });
+    expect(curriculum.items.length).toBeGreaterThan(20);
+    expect(curriculum.items.every((r) => r.scope === 'curriculum')).toBe(true);
+
+    const supplement = await mockApi.listResources({ scope: 'supplement' });
+    expect(supplement.items.every((r) => r.scope === 'supplement')).toBe(true);
+
+    // 两类加起来是全集
+    expect(curriculum.total + supplement.total).toBe(66);
   });
 
   it('按阶段、语言、时长筛选', async () => {
@@ -142,9 +173,11 @@ describe('资源库', () => {
   it('facets 基于全量数据，不随筛选变化', async () => {
     const filtered = await mockApi.listResources({ stage: 'rag' });
 
-    expect(filtered.facets.total).toBe(48);
+    expect(filtered.facets.total).toBe(66);
     expect(filtered.facets.stages).toHaveLength(6);
     expect(filtered.facets.stages.every((s) => s.count >= 2)).toBe(true);
+    expect(filtered.facets.stages.every((s) => s.curriculumCount >= 2)).toBe(true);
+    expect(filtered.facets.curriculumCount).toBeGreaterThan(20);
   });
 
   it('排序参数生效', async () => {

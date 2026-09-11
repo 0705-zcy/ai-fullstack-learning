@@ -1,4 +1,10 @@
-import { STAGE_IDS, isStageId, type QuizQuestion, type Resource } from '@aifs/shared';
+import {
+  STAGE_IDS,
+  isStageId,
+  type QuizQuestion,
+  type Resource,
+  type ResourceScope,
+} from '@aifs/shared';
 
 /**
  * 种子数据校验。
@@ -12,6 +18,24 @@ import { STAGE_IDS, isStageId, type QuizQuestion, type Resource } from '@aifs/sh
 export const MIN_RESOURCES_PER_STAGE = 2;
 /** 每个阶段至少要有几道自测题。 */
 export const MIN_QUESTIONS_PER_STAGE = 5;
+/**
+ * 每个阶段至少要有几门**完整体系课**。
+ *
+ * 设成 2 而不是 1，是因为只有一条路等于没有选择：
+ * 那门课的风格不合适（比如纯视频、或全英文），用户就无路可走。
+ * 用户最需要的是「能走完的路」，这条规则保证每个阶段都有备选。
+ */
+export const MIN_CURRICULUM_PER_STAGE = 2;
+/**
+ * 时长的合理上限。
+ *
+ * 刻意放得很宽（2000 小时）：完整体系课本来就可能是几百小时的长期路线
+ * ——The Odin Project 官方建议投入约 1000 小时。
+ * 这个上限只是为了拦住明显的录入笔误（比如把 20 写成 20000）。
+ */
+export const MAX_DURATION_HOURS = 2000;
+
+const VALID_SCOPES: readonly ResourceScope[] = ['curriculum', 'supplement'];
 
 function isHttpUrl(value: string): boolean {
   try {
@@ -38,12 +62,17 @@ export function validateResources(resources: readonly Resource[]): string[] {
     if (!isHttpUrl(resource.url)) issues.push(`${where}：url 不是合法的 http(s) 地址 → ${resource.url}`);
     if (!resource.provider.trim()) issues.push(`${where}：提供方为空`);
     if (!isStageId(resource.stage)) issues.push(`${where}：阶段非法 → ${resource.stage}`);
+    if (!VALID_SCOPES.includes(resource.scope)) {
+      issues.push(`${where}：scope 非法 → ${String(resource.scope)}`);
+    }
     if (!resource.description.trim()) issues.push(`${where}：缺少中文说明`);
     if (!Number.isFinite(resource.durationHours) || resource.durationHours <= 0) {
       issues.push(`${where}：durationHours 必须为正数`);
     }
-    if (resource.durationHours > 500) {
-      issues.push(`${where}：durationHours 看起来不合理（> 500）`);
+    if (resource.durationHours > MAX_DURATION_HOURS) {
+      issues.push(
+        `${where}：durationHours 看起来不合理（> ${MAX_DURATION_HOURS}）→ ${resource.durationHours}`,
+      );
     }
     if (!Array.isArray(resource.topics) || resource.topics.some((t) => !t.trim())) {
       issues.push(`${where}：topics 必须是字符串数组`);
@@ -54,6 +83,16 @@ export function validateResources(resources: readonly Resource[]): string[] {
     const count = resources.filter((r) => r.stage === stageId).length;
     if (count < MIN_RESOURCES_PER_STAGE) {
       issues.push(`阶段 ${stageId} 只有 ${count} 个资源，至少需要 ${MIN_RESOURCES_PER_STAGE} 个`);
+    }
+
+    const curriculum = resources.filter(
+      (r) => r.stage === stageId && r.scope === 'curriculum',
+    ).length;
+    if (curriculum < MIN_CURRICULUM_PER_STAGE) {
+      issues.push(
+        `阶段 ${stageId} 只有 ${curriculum} 门完整体系课，至少需要 ${MIN_CURRICULUM_PER_STAGE} 门` +
+          `（否则用户没有可选的完整学习路径）`,
+      );
     }
   }
 

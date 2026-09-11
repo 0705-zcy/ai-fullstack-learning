@@ -34,6 +34,7 @@ export function resourceRoutes(db: Db): Hono {
     const languageCounts = countBy((r) => r.language);
     const difficultyCounts = countBy((r) => r.difficulty);
     const formatCounts = countBy((r) => r.format);
+    const scopeCounts = countBy((r) => r.scope);
 
     const topics = new Set<string>();
     for (const resource of all) {
@@ -45,14 +46,18 @@ export function resourceRoutes(db: Db): Hono {
       total: items.length,
       facets: {
         total: all.length,
+        curriculumCount: all.filter((r) => r.scope === 'curriculum').length,
         stages: STAGES.map((stage) => ({
           id: stage.id,
           title: stage.title,
           count: all.filter((r) => r.stage === stage.id).length,
+          curriculumCount: all.filter((r) => r.stage === stage.id && r.scope === 'curriculum')
+            .length,
         })),
         languages: [...languageCounts].map(([value, count]) => ({ value, count })),
         difficulties: [...difficultyCounts].map(([value, count]) => ({ value, count })),
         formats: [...formatCounts].map(([value, count]) => ({ value, count })),
+        scopes: [...scopeCounts].map(([value, count]) => ({ value, count })),
         topics: [...topics].sort((a, b) => a.localeCompare(b)),
       },
     });

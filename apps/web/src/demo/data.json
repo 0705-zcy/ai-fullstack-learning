@@ -1,5 +1,5 @@
 {
-  "resourceCount": 48,
+  "resourceCount": 66,
   "questionCount": 36,
   "resources": [
     {
@@ -17,6 +17,7 @@
         "programming-basics"
       ],
       "stage": "foundation",
+      "scope": "supplement",
       "description": "免费长文手册：从类型注解、类型推断讲到联合类型、readonly、泛型与 type/interface 的区别，并用 Vite + React 项目贯穿演示。适合已经会写 JavaScript 的人快速补齐类型思维。",
       "notes": "全文免费、无需注册、无付费墙，另提供中文等多语言版本；前提是已具备 JavaScript 基础。",
       "verified": true
@@ -37,6 +38,7 @@
         "state-management"
       ],
       "stage": "foundation",
+      "scope": "supplement",
       "description": "React 官方入门教程，系统讲组件、JSX、状态管理与 Effects / 脱围机制等日常 80% 会用到的概念，页面内嵌可交互沙盒，改完立刻看到结果。",
       "notes": "官方开源文档，完全免费、无需登录；内嵌沙盒可直接改代码练习。",
       "verified": true
@@ -58,6 +60,7 @@
         "typescript"
       ],
       "stage": "foundation",
+      "scope": "supplement",
       "description": "Node.js 官方学习区：命令行与 REPL、HTTP 事务解剖、文件系统、异步与事件循环、TypeScript、测试与诊断。做后端 API 之前值得先读完「事件循环」那几节。",
       "notes": "官方文档全部免费、无付费墙；页面上另有需付费的 OpenJS 认证课程，不影响本页正文学习。",
       "verified": true
@@ -77,6 +80,7 @@
         "queries"
       ],
       "stage": "foundation",
+      "scope": "supplement",
       "description": "浏览器里边学边练的 SQL 入门课：18 课覆盖 SELECT、条件过滤、排序、JOIN / OUTER JOIN、聚合、查询执行顺序与建表改表。每课讲完立刻动手写查询，比看视频快得多。",
       "notes": "整站免费、免注册，练习直接在浏览器内执行，无任何付费内容。",
       "verified": true
@@ -98,8 +102,110 @@
         "debugging"
       ],
       "stage": "foundation",
+      "scope": "curriculum",
       "description": "MIT 的「缺失的一课」，补上课堂不教的工程基本功：Shell 与命令行环境、开发环境配置、调试与性能分析、Git 版本控制、打包发布与代码质量。这一课补上，后面所有阶段都会顺很多。",
       "notes": "完全免费，讲义网页与讲座视频均公开，内容以 CC BY-NC-SA 授权。",
+      "verified": true
+    },
+    {
+      "id": "en-fullstackopen",
+      "title": "Full Stack Open",
+      "url": "https://fullstackopen.com/en/",
+      "provider": "University of Helsinki",
+      "language": "en",
+      "difficulty": "intermediate",
+      "format": "interactive",
+      "durationHours": 200,
+      "topics": [
+        "react",
+        "nodejs",
+        "typescript",
+        "rest-api",
+        "graphql",
+        "mongodb",
+        "sql",
+        "testing",
+        "ci-cd",
+        "docker"
+      ],
+      "stage": "foundation",
+      "scope": "curriculum",
+      "description": "14 个部分，从 Web 原理与 React 一路讲到 Node + TypeScript、关系数据库、CI/CD 与容器化，每部分都有大量必做练习且自动判分。学完能独立构建并部署一个全栈单页应用——本阶段最接近「完整学会」的一条路。",
+      "notes": "材料免费（CC BY-NC-SA），练习自动判分；学分与证书需在赫尔辛基大学开放大学注册（收费），纯自学不发证。",
+      "verified": true
+    },
+    {
+      "id": "en-odin-project",
+      "title": "The Odin Project",
+      "url": "https://www.theodinproject.com/",
+      "provider": "The Odin Project（开源社区）",
+      "language": "en",
+      "difficulty": "beginner",
+      "format": "interactive",
+      "durationHours": 800,
+      "topics": [
+        "html-css",
+        "javascript",
+        "react",
+        "nodejs",
+        "sql",
+        "git",
+        "command-line",
+        "portfolio-projects"
+      ],
+      "stage": "foundation",
+      "scope": "curriculum",
+      "description": "零基础可入的全栈自学路线：HTML/CSS/JS → Node 后端与数据库 → React，路径内嵌数十个必做项目，产出的是可部署的作品集而不只是知识。体量最大，适合愿意长期投入的人。",
+      "notes": "100% 免费、无付费墙；不发证书，靠作品集说话；官方建议投入约 1000 小时。",
+      "verified": true
+    },
+    {
+      "id": "en-cs50x",
+      "title": "CS50x: CS50's Introduction to Computer Science",
+      "url": "https://cs50.harvard.edu/x/",
+      "provider": "Harvard University",
+      "language": "en",
+      "difficulty": "beginner",
+      "format": "video",
+      "durationHours": 120,
+      "topics": [
+        "computer-science",
+        "python",
+        "c",
+        "sql",
+        "algorithms",
+        "data-structures",
+        "web"
+      ],
+      "stage": "foundation",
+      "scope": "curriculum",
+      "description": "哈佛的计算机科学导论，11 周覆盖 C、Python、算法与数据结构、SQL、HTML/CSS/JS 与 Flask，每周一个 problem set，最后以自选期末项目收尾。想把底层基础一次打扎实就选它。",
+      "notes": "可免费旁听并免费提交作业（需 edX 账号）；验证证书与哈佛学分付费。",
+      "verified": true
+    },
+    {
+      "id": "en-cs50-web",
+      "title": "CS50's Web Programming with Python and JavaScript",
+      "url": "https://cs50.harvard.edu/web/",
+      "provider": "Harvard University",
+      "language": "en",
+      "difficulty": "intermediate",
+      "format": "video",
+      "durationHours": 100,
+      "topics": [
+        "django",
+        "react",
+        "sql",
+        "git",
+        "testing",
+        "ci-cd",
+        "security",
+        "scalability"
+      ],
+      "stage": "foundation",
+      "scope": "curriculum",
+      "description": "9 周 Web 进阶：Git、Django、SQL 建模、React、测试与 CI/CD、可扩展性与安全，含多个项目与一个期末项目。把「会写页面」推进到「能设计并上线一个 Web 应用」。",
+      "notes": "免费旁听并可免费提交作业；证书与学分付费。建议先完成 CS50x，或有一年以上编程经验。",
       "verified": true
     },
     {
@@ -119,6 +225,7 @@
         "streaming"
       ],
       "stage": "llm-core",
+      "scope": "curriculum",
       "description": "Anthropic 官方开源教学仓库，5 门 Jupyter Notebook 课程依次覆盖 API 基础（密钥、模型参数、多模态、流式响应）、提示工程、真实场景提示工程、提示评估，以及用 JSON Schema 定义工具参数的工具调用。",
       "notes": "仓库与全部 Notebook 免费开源；动手练习需自备 Anthropic API Key（官方刻意选用最低成本模型以降低学生开销）。",
       "verified": true
@@ -137,6 +244,7 @@
         "llm-api"
       ],
       "stage": "llm-core",
+      "scope": "supplement",
       "description": "吴恩达与 OpenAI 的 Isa Fulford 主讲（9 个视频 + 7 个代码示例），用 API 动手实现摘要、推断、文本转换与扩展，并讲清提示词的两条核心原则和自定义聊天机器人的搭法。节奏极快，适合先建立整体印象。",
       "notes": "需免费注册账号；页面写明「平台 beta 期间课程访问免费」，视频与代码示例免费，仅评分作业与结业证书需付费会员。免费标注为限时，建议定期复核；需自备 LLM API Key。",
       "verified": true
@@ -157,6 +265,7 @@
         "rag"
       ],
       "stage": "llm-core",
+      "scope": "supplement",
       "description": "DAIR.AI 维护的开源提示工程教程：从 LLM 参数设置、提示要素与通用技巧，到 zero-shot / few-shot / CoT / Self-Consistency / ReAct / RAG 等主流技术，再延伸到 Function Calling 与 Context Engineering。想建立方法论而不是收集零散技巧，读这份。",
       "notes": "网页版全文免费公开、无需注册或登录；站内另有付费课程，但本指南正文与 Prompt Hub 全部免费。",
       "verified": true
@@ -178,8 +287,57 @@
         "structured-output"
       ],
       "stage": "llm-core",
+      "scope": "supplement",
       "description": "微软官方教程，把 OpenAI 兼容的 Chat Completions API 讲透：system / user / assistant 消息结构与 few-shot、多轮对话循环、finish_reason 语义与流式响应、JSON 结构化输出，并用 tiktoken 统计 token、按上下文窗口裁剪历史。附 Python / .NET / JS 三套示例。",
       "notes": "文档全文免费、无需登录即可阅读；运行示例需自建 Azure OpenAI 资源并按量计费，纯阅读零成本。",
+      "verified": true
+    },
+    {
+      "id": "en-dlai-genai-llms",
+      "title": "Generative AI with Large Language Models",
+      "url": "https://www.deeplearning.ai/courses/generative-ai-with-llms",
+      "provider": "DeepLearning.AI × AWS",
+      "language": "en",
+      "difficulty": "intermediate",
+      "format": "video",
+      "durationHours": 13.5,
+      "topics": [
+        "llm-lifecycle",
+        "prompt-engineering",
+        "fine-tuning",
+        "lora",
+        "rlhf",
+        "model-evaluation",
+        "deployment"
+      ],
+      "stage": "llm-core",
+      "scope": "curriculum",
+      "description": "3 周、47 个视频加 3 个动手实验与评分测验：LLM 生命周期、提示工程与生成参数、指令微调 / LoRA / RLHF、评估与部署。学完能自己微调并评估一个模型，而不只是会调接口。",
+      "notes": "可免费注册学习并访问实验；评分作业与证书需付费会员；实验跑在 AWS SageMaker 上。",
+      "verified": true
+    },
+    {
+      "id": "en-ms-genai-path",
+      "title": "Develop generative AI apps in Azure（学习路径）",
+      "url": "https://learn.microsoft.com/en-us/training/paths/develop-generative-ai-apps/",
+      "provider": "Microsoft Learn",
+      "language": "en",
+      "difficulty": "intermediate",
+      "format": "interactive",
+      "durationHours": 10,
+      "topics": [
+        "llm-api",
+        "prompt-engineering",
+        "function-calling",
+        "rag",
+        "fine-tuning",
+        "model-evaluation",
+        "responsible-ai"
+      ],
+      "stage": "llm-core",
+      "scope": "curriculum",
+      "description": "微软官方 6 模块路径：模型选型与部署、用 Responses API 搭聊天应用、工具调用、提示工程与 RAG / 微调的取舍、责任 AI，每个模块都带动手练习。",
+      "notes": "内容免费；实验需 Azure 订阅与 Foundry 资源（新账号有免费额度），部分练习有沙盒。",
       "verified": true
     },
     {
@@ -199,6 +357,7 @@
         "retrieval"
       ],
       "stage": "rag",
+      "scope": "supplement",
       "description": "由 LangChain 创始人 Harrison Chase 主讲（8 段视频 + 6 个代码示例），完整走一遍 RAG 流水线：文档加载、切分（Document Splitting）、embedding 与向量库、高级检索、问答与带记忆的聊天机器人。",
       "notes": "需免费注册；页面写明 beta 期间课程访问免费，视频与代码示例免费，仅评分作业与证书需付费会员。需自备 LLM API Key。",
       "verified": true
@@ -219,6 +378,7 @@
         "rag-evaluation"
       ],
       "stage": "rag",
+      "scope": "supplement",
       "description": "Jerry Liu（LlamaIndex 创始人）主讲，讲两种明显优于基线的检索方法（sentence-window retrieval、auto-merging retrieval），以及 RAG triad 评估三件套：上下文相关性、有据可依程度、答案相关性。适合已跑通基础 RAG、想提升召回并建立评测闭环的人。",
       "notes": "需免费注册；beta 期间视频与代码示例免费（页面原文声明），测验与证书需付费会员。",
       "verified": true
@@ -240,6 +400,7 @@
         "rag-evaluation"
       ],
       "stage": "rag",
+      "scope": "supplement",
       "description": "微软官方 8 单元模块：RAG 要解决什么问题、如何为检索准备数据（切分 / 索引 / embedding）、如何检索并生成有依据的回答、如何评估与改进。含练习与单元测评，适合零基础先建立概念框架。",
       "notes": "Microsoft Learn 模块完全免费，学习、练习与测评均无需付费；动手跑通 Azure 服务需自有订阅（可选）。",
       "verified": true
@@ -260,8 +421,57 @@
         "embedding"
       ],
       "stage": "rag",
+      "scope": "supplement",
       "description": "专门讲重排序的一章：召回率与上下文窗口的取舍、bi-encoder 与 cross-encoder 的架构差异与延迟代价、两阶段检索（先 top_k 召回再 top_n 重排）的可运行代码与最佳实践。RAG 提效性价比最高的一步就在这里。",
       "notes": "全文免费阅读、无付费墙，配套 Notebook 开源；动手部分只需免费 Pinecone API key 的 Starter 额度。",
+      "verified": true
+    },
+    {
+      "id": "en-llm-zoomcamp",
+      "title": "LLM Zoomcamp: Free LLM Engineering Course",
+      "url": "https://datatalks.club/blog/llm-zoomcamp.html",
+      "provider": "DataTalks.Club",
+      "language": "en",
+      "difficulty": "intermediate",
+      "format": "course",
+      "durationHours": 60,
+      "topics": [
+        "rag",
+        "vector-search",
+        "hybrid-search",
+        "reranking",
+        "embedding",
+        "rag-evaluation",
+        "monitoring",
+        "orchestration"
+      ],
+      "stage": "rag",
+      "scope": "curriculum",
+      "description": "10 周 7 个模块：RAG 基础 → 向量与混合检索 → 编排 → 离线与在线评测 → Grafana 监控 → 重排序最佳实践，最终交付一个带评测与监控的完整 RAG 应用（含 UI 与 API）。把 RAG 从「能跑」做到「可上线」。",
+      "notes": "完全免费，材料永久开源；证书、作业评分与互评仅直播班提供。需自备模型 API Key 与 Docker。",
+      "verified": true
+    },
+    {
+      "id": "en-weaviate-academy",
+      "title": "Weaviate Academy · AI Developer 学习路径",
+      "url": "https://academy.weaviate.io/paths",
+      "provider": "Weaviate",
+      "language": "en",
+      "difficulty": "intermediate",
+      "format": "interactive",
+      "durationHours": 19,
+      "topics": [
+        "vector-database",
+        "embedding",
+        "chunking",
+        "semantic-search",
+        "hybrid-search",
+        "rag"
+      ],
+      "stage": "rag",
+      "scope": "curriculum",
+      "description": "官方 10 门实操课组成的完整路径：向量库架构、Python 建库与检索、embedding 评测与选型、切分策略、混合检索，收尾用 Weaviate + FastAPI 做一个 RAG API。单门课只有 1–3 小时，合起来才构成体系。",
+      "notes": "免费但需注册；官方认证仍在开发中，暂不发证。",
       "verified": true
     },
     {
@@ -281,6 +491,7 @@
         "workflow-orchestration"
       ],
       "stage": "agent",
+      "scope": "supplement",
       "description": "Anthropic 官方工程博客，区分 workflow 与 agent 两类架构，系统讲解提示链、路由、并行、orchestrator-workers、evaluator-optimizer 与自主 Agent 循环，并附工具设计（ACI）附录。核心观点是：能用简单方案解决就别上智能体。",
       "notes": "完全免费公开阅读，无需注册或登录，无付费墙。",
       "verified": true
@@ -303,6 +514,7 @@
         "failure-recovery"
       ],
       "stage": "agent",
+      "scope": "curriculum",
       "description": "微软官方入门课程，每课含讲义、短视频与代码示例，覆盖工具调用、Agentic RAG、规划模式、多智能体、元认知、记忆管理与生产部署安全。从零完整走一遍 Agent 开发全流程，这一门就够。",
       "notes": "讲义、视频与代码全部免费开源；运行示例基于 Microsoft Agent Framework / Foundry Agent Service，需要 Azure 账号（部分示例支持其他 OpenAI 兼容的模型提供商）。",
       "verified": true
@@ -324,6 +536,7 @@
         "human-in-the-loop"
       ],
       "stage": "agent",
+      "scope": "supplement",
       "description": "9 个视频 + 6 个代码示例：先用纯 Python 从零手写一个 Agent，再用 LangGraph 复刻同样的逻辑，讲持久化与状态管理、human-in-the-loop 与 agentic search。想真正实现可控的 Agent 循环，这门课最短路径。",
       "notes": "页面标注 Enroll for Free 并写明 beta 期间免费，视频与代码示例免费；仅评分作业与证书需付费会员。需自备 LLM API Key。",
       "verified": true
@@ -346,8 +559,56 @@
         "memory"
       ],
       "stage": "agent",
+      "scope": "curriculum",
       "description": "伯克利公开课，12 讲嘉宾讲座（Google DeepMind、OpenAI、Anthropic、Meta、CMU 等）配讲义与论文清单，覆盖推理、规划与工具使用、Agent 基础设施、多智能体协作、评测与安全。偏研究向，适合想搞清楚「为什么这样设计」的进阶学习者。",
       "notes": "可完全免费旁听：讲座录像、Slides、阅读材料与 quiz 全部公开，作业与证书为可选。课程学期已结束但录像仍可观看。",
+      "verified": true
+    },
+    {
+      "id": "en-dlai-agentic-ai",
+      "title": "Agentic AI",
+      "url": "https://www.deeplearning.ai/courses/agentic-ai",
+      "provider": "DeepLearning.AI",
+      "language": "en",
+      "difficulty": "intermediate",
+      "format": "video",
+      "durationHours": 16,
+      "topics": [
+        "reflection",
+        "tool-use",
+        "planning",
+        "multi-agent",
+        "llm-evaluation",
+        "error-analysis",
+        "cost-optimization"
+      ],
+      "stage": "agent",
+      "scope": "curriculum",
+      "description": "吴恩达主讲，近 10 小时视频 + 7 个代码示例 + 8 个评分作业：从零实现反思、工具调用、规划、多智能体四种模式，再做评测、错误分析、延迟与成本优化，最后谈生产部署。",
+      "notes": "课程页可免费注册学习（含免费实验）；8 个评分作业与证书需付费会员。需要中级 Python 与 LLM API 基础。",
+      "verified": true
+    },
+    {
+      "id": "en-ms-agents-azure",
+      "title": "Develop AI agents on Azure（学习路径）",
+      "url": "https://learn.microsoft.com/en-us/training/paths/develop-ai-agents-azure/",
+      "provider": "Microsoft Learn",
+      "language": "en",
+      "difficulty": "intermediate",
+      "format": "interactive",
+      "durationHours": 10,
+      "topics": [
+        "agent",
+        "custom-tools",
+        "mcp",
+        "multi-agent",
+        "workflow-orchestration",
+        "knowledge-grounding"
+      ],
+      "stage": "agent",
+      "scope": "curriculum",
+      "description": "微软官方 9 模块路径：智能体的开发、测试与部署，自定义工具，MCP 工具集成，多智能体编排，A2A 远程智能体，以及用知识库给智能体做 grounding。",
+      "notes": "内容免费；多数练习需 Azure 订阅与 Foundry 资源（新账号有免费额度）。",
       "verified": true
     },
     {
@@ -366,6 +627,7 @@
         "llm-as-a-judge"
       ],
       "stage": "engineering",
+      "scope": "supplement",
       "description": "动手实验式短课：从零搭一个 Agent、采集 trace 做调试、用代码与 LLM-as-a-Judge 分别评估 router 与 skill、跑结构化实验并上线监控。直击「Agent 做得对不对，怎么用数字判断」这个最难的问题。",
       "notes": "页面标注 Enroll for Free 并写明 beta 期间课程免费；15 节视频 + 6 个代码示例可免费学习，仅评分作业与证书需付费会员。",
       "verified": true
@@ -387,6 +649,7 @@
         "monitoring"
       ],
       "stage": "engineering",
+      "scope": "supplement",
       "description": "微软官方文档，讲生成式 AI 可观测性的三大能力（评估、监控、基于 OpenTelemetry 的分布式追踪）与 AI 应用生命周期三阶段（选模型、预生产评测、上线后监控），含 token 消耗 / 延迟 / 错误率看板、质量门禁与红队测试。",
       "notes": "文档完全免费、无需登录；评估与监控功能按 Azure 消费计费，纯读文档零成本。",
       "verified": true
@@ -407,6 +670,7 @@
         "safety"
       ],
       "stage": "engineering",
+      "scope": "supplement",
       "description": "AWS 官方文档，讲如何做内容过滤、拒绝有害话题、拦截提示词攻击（prompt attack），以及校验回答是否真的基于给定上下文。是 LLM 应用上线前做安全护栏的实用参考。",
       "notes": "AWS 官方文档免费公开阅读；实际调用 Bedrock 需 AWS 账号并按量计费，阅读学习零成本。",
       "verified": true
@@ -428,8 +692,81 @@
         "caching"
       ],
       "stage": "engineering",
+      "scope": "supplement",
       "description": "开源 LLM 网关 LiteLLM 的官方路由文档：多模型负载均衡、fallbacks 故障降级、超时与重试、cooldowns、按成本路由与缓存。想让 LLM 服务在上游抖动时依然可用并压住成本，这份文档是可落地的参考答案。",
       "notes": "开源项目官方文档全文免费、无付费墙；跟做示例需自备模型 API Key。",
+      "verified": true
+    },
+    {
+      "id": "en-mlops-zoomcamp",
+      "title": "MLOps Zoomcamp",
+      "url": "https://datatalks.club/blog/mlops-zoomcamp.html",
+      "provider": "DataTalks.Club",
+      "language": "en",
+      "difficulty": "intermediate",
+      "format": "course",
+      "durationHours": 60,
+      "topics": [
+        "deployment",
+        "monitoring",
+        "drift-detection",
+        "experiment-tracking",
+        "ci-cd",
+        "docker",
+        "testing"
+      ],
+      "stage": "engineering",
+      "scope": "curriculum",
+      "description": "3 个月 6 个模块：Docker 与云基础设施、实验追踪与模型注册、编排、部署（批 / 在线 / 流式）、监控与漂移检测、测试与 CI/CD，终交付一个可复现、带监控的生产级项目。AI 应用上线会遇到的问题，这里几乎都有对应做法。",
+      "notes": "完全免费永久开放；证书与评分仅直播班提供；需 Docker 与云环境（AWS 部分可能产生小额费用）。",
+      "verified": true
+    },
+    {
+      "id": "en-madewithml",
+      "title": "Made With ML",
+      "url": "https://madewithml.com/",
+      "provider": "Anyscale / Goku Mohandas",
+      "language": "en",
+      "difficulty": "advanced",
+      "format": "docs",
+      "durationHours": 35,
+      "topics": [
+        "mlops",
+        "testing",
+        "ci-cd",
+        "serving",
+        "monitoring",
+        "versioning",
+        "reproducibility"
+      ],
+      "stage": "engineering",
+      "scope": "curriculum",
+      "description": "按「设计 → 数据 → 模型 → 开发 → 测试 → 复现 → 生产」八个阶段组织，边讲原理边写代码：脚本化与 CLI、代码与数据测试、版本管理、CI/CD、服务化与监控。这套工程方法平移到 LLM 应用上非常直接。",
+      "notes": "在线教材与配套代码免费；直播班（含 GPU 与答疑）付费；需要 Python 与机器学习基础。",
+      "verified": true
+    },
+    {
+      "id": "en-data-eng-zoomcamp",
+      "title": "Data Engineering Zoomcamp",
+      "url": "https://datatalks.club/blog/data-engineering-zoomcamp.html",
+      "provider": "DataTalks.Club",
+      "language": "en",
+      "difficulty": "intermediate",
+      "format": "course",
+      "durationHours": 60,
+      "topics": [
+        "docker",
+        "terraform",
+        "orchestration",
+        "data-warehouse",
+        "dbt",
+        "spark",
+        "kafka"
+      ],
+      "stage": "engineering",
+      "scope": "curriculum",
+      "description": "9 周：Docker / PostgreSQL / Terraform 基础设施、编排、数仓与 dbt、Spark 批处理、Kafka 流处理，最后三周交付端到端数据管道与看板。补的是 AI 应用背后的数据管道、编排与扩展能力。",
+      "notes": "完全免费；证书与评分仅直播班提供；部分模块依赖 GCP 免费额度（需绑卡）。",
       "verified": true
     },
     {
@@ -450,6 +787,7 @@
         "deployment"
       ],
       "stage": "capstone",
+      "scope": "supplement",
       "description": "3 小时完整项目课：Next.js App Router + Supabase（认证 / 数据库）+ Prisma + LLM API，从零做出带 AI 问答的笔记应用并部署到 Vercel。适合已会 React、想走通「前端 + 后端 + 数据库 + AI + 上线」全链路的人。",
       "notes": "免费：介绍页指向 freeCodeCamp 官方 YouTube 上的完整视频，无需注册；需自备模型 API key 与 Supabase 免费账号。",
       "verified": true
@@ -472,30 +810,58 @@
         "database"
       ],
       "stage": "capstone",
+      "scope": "supplement",
       "description": "Vercel 官方指南：用 Next.js App Router + AI SDK + Drizzle ORM + Postgres/pgvector 构建一个「只基于自有知识库回答」的 RAG Agent，含知识入库与检索查询。想把 RAG 真正做成产品而不是 Notebook 玩具，照着这份做。",
       "notes": "官方文档全文免费开放，含配套 starter 仓库；需自备模型 API key，向量库可用免费 Postgres（如 Neon）。",
       "verified": true
     },
     {
-      "id": "en-ms-genai-path",
-      "title": "Develop generative AI apps in Azure",
-      "url": "https://learn.microsoft.com/en-us/training/paths/develop-generative-ai-apps/",
-      "provider": "Microsoft Learn",
+      "id": "en-ml-zoomcamp",
+      "title": "Machine Learning Zoomcamp",
+      "url": "https://datatalks.club/blog/machine-learning-zoomcamp.html",
+      "provider": "DataTalks.Club",
       "language": "en",
       "difficulty": "intermediate",
-      "format": "interactive",
-      "durationHours": 8,
+      "format": "course",
+      "durationHours": 120,
       "topics": [
-        "capstone",
-        "fullstack",
-        "rag",
-        "agent",
-        "deployment",
-        "prompt-engineering"
+        "python",
+        "scikit-learn",
+        "pytorch",
+        "docker",
+        "fastapi",
+        "kubernetes",
+        "serverless",
+        "capstone-project"
       ],
       "stage": "capstone",
-      "description": "微软官方 6 模块学习路径：模型选型与部署、开发第一个生成式 AI 应用、工具调用、用 RAG 做 grounding、性能优化与负责任 AI。适合有编程经验、想系统补齐「云上生成式 AI 应用开发」这一块的人。",
-      "notes": "Microsoft Learn 全部模块免费学习（含练习与知识检查），无付费墙；动手实验需 Azure 订阅。",
+      "scope": "curriculum",
+      "description": "4 个月：前半程打机器学习基础，后半程把模型做成 FastAPI 服务并用 Docker / K8s / AWS Lambda 上线，最后两个自主选题的作品项目（中期 + 毕业）并做互评。产出是一个真正上线过的产品，而不只是跑通的代码。",
+      "notes": "完全免费，材料与录播永久开放；每周约 10 小时；证书要求完成两个项目并参与互评，仅直播班提供。",
+      "verified": true
+    },
+    {
+      "id": "en-fsdl-2022",
+      "title": "Full Stack Deep Learning（2022 完整课程）",
+      "url": "https://fullstackdeeplearning.com/course/2022/",
+      "provider": "The Full Stack (FSDL)",
+      "language": "en",
+      "difficulty": "advanced",
+      "format": "video",
+      "durationHours": 60,
+      "topics": [
+        "troubleshooting",
+        "testing",
+        "data-management",
+        "deployment",
+        "monitoring",
+        "ci-cd",
+        "capstone-project"
+      ],
+      "stage": "capstone",
+      "scope": "curriculum",
+      "description": "9 讲 + 8 个 lab + 10 周团队项目：开发基础设施、调试与测试、数据管理与标注、部署（Web / Serverless）、持续学习与监控，团队从零做出并上线一个机器学习驱动的产品。工程方法对 LLM 应用完全通用。",
+      "notes": "讲义、lab 与视频永久免费；不发证书；团队项目是核心产出（也可以独立完成）。",
       "verified": true
     },
     {
@@ -512,6 +878,7 @@
         "programming-basics"
       ],
       "stage": "foundation",
+      "scope": "supplement",
       "description": "中文里少见的、能把类型系统讲透的系统教程：从基础类型、interface、泛型一路讲到装饰器、类型工具和 tsconfig。适合已经会写 JS 但没系统学过 TS 的人。",
       "notes": "全文免费在线阅读，无需注册，采用 CC BY-SA 3.0 协议。",
       "verified": true
@@ -532,6 +899,7 @@
         "jsx"
       ],
       "stage": "foundation",
+      "scope": "supplement",
       "description": "React 官方文档的中文版学习章节，用「井字棋」教程加四大板块（描述 UI、添加交互、状态管理、脱围机制）带你上手。页面内嵌可运行的在线示例。",
       "notes": "完全免费、无登录要求；官方维护的中文翻译，内容与英文版同步。",
       "verified": true
@@ -553,6 +921,7 @@
         "async"
       ],
       "stage": "foundation",
+      "scope": "supplement",
       "description": "Node.js 官方 Learn 文档的中文译本，覆盖命令行运行脚本、HTTP 事务结构与服务器、文件系统、事件循环与异步、测试与安全实践。做后端 API 前值得先过一遍。",
       "notes": "全文免费、无需注册。nodejs.cn 是社区维护的中文镜像站，非 nodejs.org 官方域名。",
       "verified": true
@@ -572,6 +941,7 @@
         "command-line"
       ],
       "stage": "foundation",
+      "scope": "supplement",
       "description": "Git 官方推荐的《Pro Git》简体中文完整译本。分支模型和分布式工作流这两章尤其值得精读——出问题时能不能把历史救回来，全看这里。",
       "notes": "全文免费在线阅读，并提供免费 PDF/ePub 下载，无需登录。",
       "verified": true
@@ -592,8 +962,31 @@
         "data-modeling"
       ],
       "stage": "foundation",
+      "scope": "supplement",
       "description": "从 SELECT / WHERE / ORDER BY / JOIN 到约束、索引、视图与聚合函数的系统入门，每节配可在网页里直接运行的实例和自测题，适合零基础把查询写顺手。",
       "notes": "全文免费直接阅读，无需注册；页面有广告但不影响正文。",
+      "verified": true
+    },
+    {
+      "id": "zh-javascript-info",
+      "title": "现代 JavaScript 教程",
+      "url": "https://zh.javascript.info/",
+      "provider": "javascript-tutorial（开源社区）",
+      "language": "zh",
+      "difficulty": "beginner",
+      "format": "interactive",
+      "durationHours": 40,
+      "topics": [
+        "javascript",
+        "programming-basics",
+        "frontend",
+        "async",
+        "dom"
+      ],
+      "stage": "foundation",
+      "scope": "curriculum",
+      "description": "从语言基础、浏览器 DOM 一路讲到异步、模块与网络请求，每节都配可在线运行的任务和测验——中文里少见的「真的有练习可做」的 JS 教程。学完能独立写出带交互的网页应用。",
+      "notes": "全文免费，是 The Modern JavaScript Tutorial 的官方中文翻译，采用 CC BY-NC-SA 4.0。",
       "verified": true
     },
     {
@@ -613,6 +1006,7 @@
         "token-usage"
       ],
       "stage": "llm-core",
+      "scope": "supplement",
       "description": "中文第一手 API 文档：首次调用、多轮对话、流式输出、JSON Output、Tool Calls、上下文硬盘缓存、Token 用量与限速、错误码。兼容 OpenAI 协议，学完可平移到其他厂商。",
       "notes": "文档全文免费、无需登录；实际调用 API 按 Token 计费，需注册并充值。",
       "verified": true
@@ -633,6 +1027,7 @@
         "streaming"
       ],
       "stage": "llm-core",
+      "scope": "supplement",
       "description": "手把手讲开通、创建 API Key、配置环境变量，以及用 OpenAI 兼容接口、DashScope SDK、curl 三种方式调用模型。适合第一次把 LLM API 接进自己代码的人。",
       "notes": "文档免费阅读；需注册阿里云账号并开通百炼才能实际调用，新用户有免费额度。",
       "verified": true
@@ -654,6 +1049,7 @@
         "rag"
       ],
       "stage": "llm-core",
+      "scope": "supplement",
       "description": "提示工程的系统性参考：零样本/少样本、CoT、自我一致性、ToT、ReAct、Reflexion、RAG、Function Calling，还有对抗性提示（提示注入）这一章。",
       "notes": "正文全文免费在线阅读，无需注册；页面顶部有第三方付费课程广告，与免费正文无关。",
       "verified": true
@@ -675,8 +1071,55 @@
         "llm-evaluation"
       ],
       "stage": "llm-core",
+      "scope": "curriculum",
       "description": "把吴恩达的大模型系列短课筛翻译并复现成中文：从 Prompt Engineering 到基于 API 搭问答系统、用 LangChain 开发应用与访问个人数据。适合边看边跑。",
       "notes": "按 CC BY-NC-SA 4.0 完全免费开放，含免费 PDF 与双语字幕视频；需自备 LLM API Key 才能跑通代码。",
+      "verified": true
+    },
+    {
+      "id": "zh-happy-llm",
+      "title": "Happy-LLM：从零开始的大语言模型原理与实践",
+      "url": "https://github.com/datawhalechina/happy-llm",
+      "provider": "Datawhale",
+      "language": "zh",
+      "difficulty": "advanced",
+      "format": "docs",
+      "durationHours": 40,
+      "topics": [
+        "llm-internals",
+        "transformer",
+        "pretraining",
+        "sft",
+        "lora",
+        "agentic-rl"
+      ],
+      "stage": "llm-core",
+      "scope": "curriculum",
+      "description": "把「模型是怎么来的」讲透：Transformer 架构、预训练、SFT 与 LoRA 微调，一路讲到 Agentic-RL，配可运行的代码与习题。没有它，对 LLM 的认知会停在「会调 API」这一层。",
+      "notes": "开源免费（CC BY-NC-SA 4.0），含免费 PDF；代码需 clone 仓库运行。",
+      "verified": true
+    },
+    {
+      "id": "zh-tiny-universe",
+      "title": "Tiny-Universe：大模型白盒子构建指南",
+      "url": "https://github.com/datawhalechina/tiny-universe",
+      "provider": "Datawhale",
+      "language": "zh",
+      "difficulty": "advanced",
+      "format": "docs",
+      "durationHours": 30,
+      "topics": [
+        "llm-internals",
+        "hand-written",
+        "rag",
+        "agent",
+        "llm-evaluation",
+        "tinyeval"
+      ],
+      "stage": "llm-core",
+      "scope": "curriculum",
+      "description": "强调「不调 API、全部手搓」：自己实现 Transformer、RAG、Agent 与评测框架 TinyEval。仅需 2G 显存就能跑通，是排障能力与「知其所以然」的来源——出了问题知道该往哪一层查。",
+      "notes": "开源免费；需 clone 仓库运行，建议有 GPU（2G 显存即可）。",
       "verified": true
     },
     {
@@ -698,6 +1141,7 @@
         "rag-evaluation"
       ],
       "stage": "rag",
+      "scope": "curriculum",
       "description": "RAG 的中文全栈教程：数据加载与文本切分、向量嵌入与向量库、索引优化、混合检索、查询改写与 RAG 系统评估，最后有端到端项目。是目前中文里覆盖最完整的一份。",
       "notes": "开源免费（CC BY-NC-SA 4.0），无需注册；在线站点为前端渲染，正文需在浏览器中查看。",
       "verified": true
@@ -720,6 +1164,7 @@
         "query-rewriting"
       ],
       "stage": "rag",
+      "scope": "curriculum",
       "description": "刻意不用 LangChain，手写文本切分、向量检索、BM25 混合检索、Cross-Encoder 重排和 Query 改写。还配了「条款被切散」「该召回的没召回」这类可复现的失败演练，是理解 RAG 内部机制的好材料。",
       "notes": "MIT 协议完全免费开源，无需注册。需自行 clone 仓库运行。",
       "verified": true
@@ -740,6 +1185,7 @@
         "retrieval"
       ],
       "stage": "rag",
+      "scope": "supplement",
       "description": "托管平台的官方 RAG 文档：文档导入、智能切分策略、向量索引构建、TopK 与相似度阈值调参、命中测试。想快速看清 RAG 链路上每个环节在做什么，这份最省时间。",
       "notes": "文档免费阅读，无需登录；使用知识库能力需开通百炼并按量计费，新用户有免费额度。",
       "verified": true
@@ -761,6 +1207,7 @@
         "metadata-filtering"
       ],
       "stage": "rag",
+      "scope": "supplement",
       "description": "一篇从零到上线的 RAG 实战长文，重点在工程细节：为什么需要 RAG、系统架构与技术选型、文档切分入库、问答链构建，以及 Rerank 重排、元数据过滤、混合检索等优化点。",
       "notes": "文章全文免费阅读，无需登录即可查看正文。",
       "verified": true
@@ -784,6 +1231,7 @@
         "agent-evaluation"
       ],
       "stage": "agent",
+      "scope": "curriculum",
       "description": "手写 ReAct、Plan-and-Solve、Reflection 等经典范式并自建 Agent 框架，深入记忆与检索、上下文工程、MCP 协议、智能体性能评估，最后以综合项目收尾。中文智能体教程里最系统的一份。",
       "notes": "完全免费开源，含免费 PDF，无需注册；在线站点为前端渲染，正文需在浏览器中查看。",
       "verified": true
@@ -805,6 +1253,7 @@
         "human-in-the-loop"
       ],
       "stage": "agent",
+      "scope": "supplement",
       "description": "讲怎么用图编排构建长时间运行的有状态智能体：持久化执行、流式传输、中断与人机协作、状态回溯、内存与子图、部署与可观察性。想做可控的 agent 循环而不是一个大 while，值得读。",
       "notes": "文档全文免费阅读，无需登录；社区维护的中文本地化站点，部分页面会提示跳转英文官方文档。",
       "verified": true
@@ -827,6 +1276,7 @@
         "llm-observability"
       ],
       "stage": "agent",
+      "scope": "supplement",
       "description": "开源 LLM 应用平台的官方中文文档：Agent 与工作流编排、知识库、工具与 MCP 集成、日志与标注。适合低代码先把一个能用的智能体跑起来，再回头看它内部怎么实现。",
       "notes": "文档完全免费；社区版可 Docker 自部署免费使用，云版有免费额度、超出后按量计费。",
       "verified": true
@@ -848,8 +1298,34 @@
         "memory"
       ],
       "stage": "agent",
+      "scope": "supplement",
       "description": "官方文档讲清智能体的三个关键设计：系统提示词如何定义角色、行为边界与工具使用时机；知识库与插件/MCP 如何挂载；长期记忆与版本如何管理并发布成 API。",
       "notes": "文档免费阅读，无需登录；实际问答按模型 Token 计费，新用户有免费额度。",
+      "verified": true
+    },
+    {
+      "id": "zh-self-llm",
+      "title": "Self-LLM：开源大模型食用指南",
+      "url": "https://github.com/datawhalechina/self-llm",
+      "provider": "Datawhale",
+      "language": "zh",
+      "difficulty": "advanced",
+      "format": "docs",
+      "durationHours": 50,
+      "topics": [
+        "deployment",
+        "vllm",
+        "ollama",
+        "fine-tuning",
+        "lora",
+        "qlora",
+        "serving",
+        "model-evaluation"
+      ],
+      "stage": "engineering",
+      "scope": "curriculum",
+      "description": "覆盖 50+ 开源模型的环境配置与部署（vLLM、SGLang、Ollama、llama.cpp）、全量微调与 LoRA/QLoRA，以及服务化之后的性能与精度测试。中文里模型侧工程最完整的一条路。",
+      "notes": "Apache-2.0 授权，是中文清单里少数明确可商用的资源；开源免费，需自备 GPU 环境。",
       "verified": true
     },
     {
@@ -869,6 +1345,7 @@
         "baseline-benchmark"
       ],
       "stage": "engineering",
+      "scope": "supplement",
       "description": "系统讲 LLM 评测工程：自定义评测与基线评测的区别、三类评分器（LLM-as-a-judge / 规则评分 / 人工评分）、评测数据集规模建议与成本优化。想做上线前的评估体系，从这里入手。",
       "notes": "文档免费阅读；执行评测按推理与评分 Token 计费，可导入已有推理结果避免重复计费。",
       "verified": true
@@ -890,6 +1367,7 @@
         "prompt-management"
       ],
       "stage": "engineering",
+      "scope": "supplement",
       "description": "LLM 应用的追踪（Trace）、成本与延迟监控、LLM-as-a-judge 与人工标注评估、提示管理与 A/B 测试，以及与 LangChain、DeepSeek、Dify 的集成方式。",
       "notes": "中文页免费阅读；平台开源可自托管免费使用，云版有免费额度、超出后按用量计费。",
       "verified": true
@@ -911,6 +1389,7 @@
         "deployment"
       ],
       "stage": "engineering",
+      "scope": "supplement",
       "description": "可观测性三大信号（Trace / Metrics / Logs）、上下文传播、自动与手动插桩、Collector、采样策略。给 LLM 服务做统一追踪与告警的行业标准读物。",
       "notes": "文档全文免费开放，CC BY 4.0，无需注册；含 JavaScript / Node.js 的完整入门章节。",
       "verified": true
@@ -931,6 +1410,7 @@
         "input-validation"
       ],
       "stage": "engineering",
+      "scope": "supplement",
       "description": "面向生产环境的中文安全实践长文，讨论把大模型接入客服、代码审查、知识问答时最容易被低估的风险：密钥保护、输入输出边界、提示注入防护。适合上线前做一次安全评审。",
       "notes": "文章全文免费阅读，无需登录即可查看正文。",
       "verified": true
@@ -953,6 +1433,7 @@
         "llm-evaluation"
       ],
       "stage": "capstone",
+      "scope": "curriculum",
       "description": "以「个人知识库助手」为交付目标的完整项目课程：多厂商 API 统一封装、文档处理与向量库搭建、检索问答链、Streamlit 部署、系统评估与优化。学完手上就有一个能跑、能讲的作品。",
       "notes": "开源免费，含免费 PDF，无需注册；运行项目需自备 LLM API Key，不需要 GPU。",
       "verified": true
@@ -974,6 +1455,7 @@
         "prompt-engineering"
       ],
       "stage": "capstone",
+      "scope": "supplement",
       "description": "端到端最短路径：创建智能体、设计 System Prompt、上传私有文档建知识库、切分与索引、挂载检索、测试并发布。拿它当毕业项目的「最小可用版本」基准，再自己动手实现一遍。",
       "notes": "教程免费阅读、无需付费即可跟做；需注册阿里云账号并开通百炼，模型调用产生 Token 费用。",
       "verified": true
@@ -995,6 +1477,7 @@
         "api-integration"
       ],
       "stage": "capstone",
+      "scope": "supplement",
       "description": "一段实战视频：用通义千问与百炼从零搭出一个法律咨询 Agent，创建应用、配置知识库、上传民法典文档建索引、测试问答，最后通过 API 集成到既有系统。适合当第一个完整交付型练手项目。",
       "notes": "视频与图文在阿里云开发者社区免费公开，无付费墙、无需登录即可观看；实操需开通百炼。",
       "verified": true

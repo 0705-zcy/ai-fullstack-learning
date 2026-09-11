@@ -1,4 +1,10 @@
-import type { Difficulty, LanguageCode, ProgressStatus, ResourceFormat } from '@aifs/shared';
+import type {
+  Difficulty,
+  LanguageCode,
+  ProgressStatus,
+  ResourceFormat,
+  ResourceScope,
+} from '@aifs/shared';
 
 /** 阶段的 Tailwind 配色。必须写成静态类名，否则 Tailwind 扫描不到就不会生成样式。 */
 export interface AccentClasses {
@@ -114,6 +120,17 @@ export const FORMAT_LABEL: Record<ResourceFormat, string> = {
   docs: '文档',
   interactive: '交互式',
   course: '课程',
+};
+
+export const SCOPE_LABEL: Record<ResourceScope, string> = {
+  curriculum: '完整体系课',
+  supplement: '单点补充',
+};
+
+/** 完整体系课的一句话说明，用在筛选器与空状态里。 */
+export const SCOPE_HINT: Record<ResourceScope, string> = {
+  curriculum: '从入门一路讲到能独立做出项目，有动手环节，学完有可验证的成果',
+  supplement: '官方文档、短课、专题文章，用来查漏补缺',
 };
 
 export const STATUS_LABEL: Record<ProgressStatus, string> = {

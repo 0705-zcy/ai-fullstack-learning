@@ -19,6 +19,7 @@
     "demo": "npm run build:shared && npm run demo:data && npm run dev:demo",
     "dev:demo": "npm run dev:demo -w @aifs/web",
     "demo:data": "npm run demo:data -w @aifs/api",
+    "check:links": "npm run build:shared && npm run check:links -w @aifs/api",
     "build:demo": "npm run build:shared && npm run demo:data && npm run build:demo -w @aifs/web",
     "build": "npm run build:shared && npm run build -w @aifs/api && npm run build -w @aifs/web",
     "test": "npm run build:shared && npm run test -w @aifs/shared && npm run test -w @aifs/api && npm run test -w @aifs/web",

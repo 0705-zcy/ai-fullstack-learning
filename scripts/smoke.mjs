@@ -79,6 +79,11 @@ let firstResourceId = null;
     JSON.stringify(all.json?.facets?.stages?.map((s) => `${s.id}:${s.count}`)),
   );
   check(
+    '每个阶段都至少有 2 门完整体系课（「能完整学会」的底线）',
+    all.json?.facets?.stages?.every((s) => s.curriculumCount >= 2),
+    JSON.stringify(all.json?.facets?.stages?.map((s) => `${s.id}:${s.curriculumCount}`)),
+  );
+  check(
     '中英文资源都有',
     all.json?.facets?.languages?.some((l) => l.value === 'zh') &&
       all.json?.facets?.languages?.some((l) => l.value === 'en'),
@@ -88,8 +93,33 @@ let firstResourceId = null;
     '所有资源链接都是 https',
     all.json?.items?.every((r) => r.url.startsWith('https://')),
   );
+  check(
+    '每条资源都有合法的 scope',
+    all.json?.items?.every((r) => r.scope === 'curriculum' || r.scope === 'supplement'),
+  );
 
   firstResourceId = all.json?.items?.[0]?.id ?? null;
+
+  const curriculumOnly = await call('/api/resources?scope=curriculum');
+  check(
+    '只看完整体系课：筛选生效且数量可观',
+    curriculumOnly.json?.items?.every((r) => r.scope === 'curriculum') &&
+      curriculumOnly.json.total >= 18,
+    `实际 ${curriculumOnly.json?.total} 条`,
+  );
+
+  const supplementOnly = await call('/api/resources?scope=supplement');
+  check(
+    '两类资源加起来是全集，没有遗漏',
+    (curriculumOnly.json?.total ?? 0) + (supplementOnly.json?.total ?? 0) === all.json?.total,
+  );
+
+  const defaultOrder = await call('/api/resources?stage=foundation');
+  check(
+    '默认排序把体系课排在同一阶段前面',
+    defaultOrder.json?.items?.[0]?.scope === 'curriculum',
+    `首条是 ${defaultOrder.json?.items?.[0]?.scope}`,
+  );
 
   const ragOnly = await call('/api/resources?stage=rag');
   check(

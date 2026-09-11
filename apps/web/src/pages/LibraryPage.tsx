@@ -102,7 +102,11 @@ export function LibraryPage() {
       <header>
         <h1 className="text-2xl font-bold text-slate-900">免费课程资源库</h1>
         <p className="mt-1 max-w-3xl text-sm text-slate-500">
-          全部为可免费获取的外部课程与文档。用下面的筛选器按阶段、语言、难度、形式和时长挑一个适合你的。
+          全部为可免费获取的外部课程与文档。资源分两类：
+          <strong className="text-slate-700">完整体系课</strong>
+          （从入门讲到能独立做出项目，有动手环节）与
+          <strong className="text-slate-700">单点补充</strong>
+          （官方文档、短课、专题文章）。默认排序会把体系课排在前面。
         </p>
       </header>
 
@@ -186,7 +190,22 @@ export function LibraryPage() {
           />
         </div>
 
-        <div className="mt-3 flex items-center gap-3 border-t border-slate-100 pt-3">
+        <div className="mt-3 flex flex-wrap items-center gap-3 border-t border-slate-100 pt-3">
+          <label
+            htmlFor="filter-scope"
+            className="flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-medium text-slate-700 hover:bg-slate-100"
+          >
+            <input
+              id="filter-scope"
+              type="checkbox"
+              checked={filters.scope === 'curriculum'}
+              onChange={(event) => update('scope', event.target.checked ? 'curriculum' : '')}
+              className="h-3.5 w-3.5"
+            />
+            只看能完整学会的体系课
+            {facets && <span className="text-slate-400">（{facets.curriculumCount} 门）</span>}
+          </label>
+
           <p className="text-xs text-slate-500">
             共 {resources.data?.total ?? 0} 个资源
             {activeCount > 0 && ` · 已应用 ${activeCount} 个筛选条件`}
@@ -215,8 +234,12 @@ export function LibraryPage() {
         <ErrorState message={resources.error} onRetry={resources.reload} />
       ) : (resources.data?.items.length ?? 0) === 0 ? (
         <EmptyState
-          title="没有符合条件的资源"
-          description="试着放宽筛选条件，或者清空筛选看看全部内容。"
+          title={filters.scope === 'curriculum' ? '这个条件下没有完整体系课' : '没有符合条件的资源'}
+          description={
+            filters.scope === 'curriculum'
+              ? '试试取消「只看体系课」，或者清空其他筛选条件。体系课数量本就不多——一门能走完的课比十篇碎片文章更有价值。'
+              : '试着放宽筛选条件，或者清空筛选看看全部内容。'
+          }
           action={
             <button
               type="button"

@@ -1,9 +1,11 @@
 import type { QuizQuestion, Resource } from '@aifs/shared';
+import { STAGE_IDS } from '@aifs/shared';
 import { describe, expect, it } from 'vitest';
 import { createFixtureResources, makeResource } from '../test-support/context.js';
 import { QUIZ_QUESTIONS } from './quizzes.js';
 import { RESOURCES } from './resources.js';
 import {
+  MIN_CURRICULUM_PER_STAGE,
   MIN_QUESTIONS_PER_STAGE,
   MIN_RESOURCES_PER_STAGE,
   assertSeedValid,
@@ -58,6 +60,23 @@ describe('validateResources', () => {
       r.id === 'rag-a' ? { ...r, stage: 'unknown' as Resource['stage'] } : r,
     );
     expect(validateResources(resources).some((i) => i.includes('阶段非法'))).toBe(true);
+  });
+
+  it('揪出非法的 scope', () => {
+    const resources = createFixtureResources().map((r) =>
+      r.id === 'rag-a' ? { ...r, scope: 'partial' as Resource['scope'] } : r,
+    );
+    expect(validateResources(resources).some((i) => i.includes('scope 非法'))).toBe(true);
+  });
+
+  it('某阶段的完整体系课不足两门时给出提示', () => {
+    // 把 rag 阶段的一门体系课降级成单点补充，该阶段就只剩 1 门了
+    const resources = createFixtureResources().map((r) =>
+      r.id === 'rag-c' ? { ...r, scope: 'supplement' as const } : r,
+    );
+
+    const issues = validateResources(resources);
+    expect(issues.some((i) => i.includes('rag') && i.includes('完整体系课'))).toBe(true);
   });
 
   it('揪出缺失说明与不合理时长', () => {
@@ -153,8 +172,7 @@ describe('真实种子数据', () => {
   });
 
   it('资源和题目覆盖全部 6 个阶段', () => {
-    const stages = ['foundation', 'llm-core', 'rag', 'agent', 'engineering', 'capstone'];
-    for (const stage of stages) {
+    for (const stage of STAGE_IDS) {
       expect(RESOURCES.filter((r) => r.stage === stage).length).toBeGreaterThanOrEqual(
         MIN_RESOURCES_PER_STAGE,
       );
@@ -162,5 +180,25 @@ describe('真实种子数据', () => {
         MIN_QUESTIONS_PER_STAGE,
       );
     }
+  });
+
+  it('每个阶段都有至少两门完整体系课（用户「能完整学会」的底线）', () => {
+    for (const stage of STAGE_IDS) {
+      const curriculum = RESOURCES.filter((r) => r.stage === stage && r.scope === 'curriculum');
+      expect(
+        curriculum.length,
+        `阶段 ${stage} 只有 ${curriculum.length} 门体系课`,
+      ).toBeGreaterThanOrEqual(MIN_CURRICULUM_PER_STAGE);
+    }
+  });
+
+  it('体系课确实比单点补充长（否则分类标准就自相矛盾了）', () => {
+    const avg = (items: readonly { durationHours: number }[]) =>
+      items.reduce((sum, r) => sum + r.durationHours, 0) / (items.length || 1);
+
+    const curriculumAvg = avg(RESOURCES.filter((r) => r.scope === 'curriculum'));
+    const supplementAvg = avg(RESOURCES.filter((r) => r.scope === 'supplement'));
+
+    expect(curriculumAvg).toBeGreaterThan(supplementAvg * 2);
   });
 });

@@ -3,6 +3,8 @@ import {
   DIFFICULTY_LABEL,
   FORMAT_LABEL,
   LANGUAGE_LABEL,
+  SCOPE_HINT,
+  SCOPE_LABEL,
   STATUS_LABEL,
   accentOf,
   formatDateTime,
@@ -99,11 +101,25 @@ describe('标签字典', () => {
     expect(Object.keys(DIFFICULTY_LABEL).sort()).toEqual(['advanced', 'beginner', 'intermediate']);
     expect(Object.keys(FORMAT_LABEL).sort()).toEqual(['course', 'docs', 'interactive', 'video']);
     expect(Object.keys(STATUS_LABEL).sort()).toEqual(['completed', 'learning', 'wishlist']);
+    expect(Object.keys(SCOPE_LABEL).sort()).toEqual(['curriculum', 'supplement']);
+    expect(Object.keys(SCOPE_HINT).sort()).toEqual(['curriculum', 'supplement']);
 
-    for (const dict of [LANGUAGE_LABEL, DIFFICULTY_LABEL, FORMAT_LABEL, STATUS_LABEL]) {
+    for (const dict of [
+      LANGUAGE_LABEL,
+      DIFFICULTY_LABEL,
+      FORMAT_LABEL,
+      STATUS_LABEL,
+      SCOPE_LABEL,
+      SCOPE_HINT,
+    ]) {
       for (const label of Object.values(dict)) {
         expect(label.length).toBeGreaterThan(0);
       }
     }
+  });
+
+  it('体系课的标签要能一眼看懂，不能只是「curriculum」', () => {
+    expect(SCOPE_LABEL.curriculum).toContain('完整');
+    expect(SCOPE_HINT.curriculum).toContain('项目');
   });
 });

@@ -34,6 +34,7 @@ export function makeResource(input: {
   language?: Resource['language'];
   difficulty?: Resource['difficulty'];
   format?: Resource['format'];
+  scope?: Resource['scope'];
   topics?: string[];
 }): Resource {
   return {
@@ -47,13 +48,20 @@ export function makeResource(input: {
     durationHours: input.durationHours ?? 4,
     topics: input.topics ?? ['testing'],
     stage: input.stage,
+    scope: input.scope ?? 'supplement',
     description: `用于测试的 ${input.stage} 阶段资源`,
     notes: '测试数据',
     verified: true,
   };
 }
 
-/** 每个阶段两个资源，便于测试「阶段完成度」这类逻辑。 */
+/**
+ * 每个阶段三个资源，覆盖到筛选与排序需要区分的所有维度：
+ *  - `-a`：单点补充、2 小时、英文、入门 → 默认排序里排最后，用来验证「体系课优先」
+ *  - `-b`：完整体系课、8 小时、中文、高阶
+ *  - `-c`：完整体系课、12 小时、英文、进阶
+ * 每阶段两门体系课，满足种子的最低要求，也让 scope 筛选两侧都有数据。
+ */
 export function createFixtureResources(): Resource[] {
   const resources: Resource[] = [];
   for (const stageId of STAGE_IDS) {
@@ -65,6 +73,14 @@ export function createFixtureResources(): Resource[] {
         durationHours: 8,
         difficulty: 'advanced',
         language: 'zh',
+        scope: 'curriculum',
+      }),
+      makeResource({
+        id: `${stageId}-c`,
+        stage: stageId,
+        durationHours: 12,
+        difficulty: 'intermediate',
+        scope: 'curriculum',
       }),
     );
   }

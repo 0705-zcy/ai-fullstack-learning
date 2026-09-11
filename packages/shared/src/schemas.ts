@@ -24,6 +24,7 @@ export const stageIdSchema = z.enum(STAGE_ID_VALUES);
 export const difficultySchema = z.enum(['beginner', 'intermediate', 'advanced']);
 export const resourceFormatSchema = z.enum(['video', 'docs', 'interactive', 'course']);
 export const languageSchema = z.enum(['en', 'zh']);
+export const resourceScopeSchema = z.enum(['curriculum', 'supplement']);
 export const progressStatusSchema = z.enum(['wishlist', 'learning', 'completed']);
 
 /**
@@ -77,6 +78,7 @@ export const resourceQuerySchema = z.object({
   language: languageSchema.optional(),
   difficulty: difficultySchema.optional(),
   format: resourceFormatSchema.optional(),
+  scope: resourceScopeSchema.optional(),
   q: z.string().trim().max(120).optional(),
   maxHours: z.coerce.number().positive().max(500).optional(),
   sort: z.enum(['default', 'duration-asc', 'duration-desc', 'title']).optional(),

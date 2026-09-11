@@ -3,6 +3,7 @@ import type {
   LanguageCode,
   Resource,
   ResourceFormat,
+  ResourceScope,
   StageId,
 } from '@aifs/shared';
 import type { Db } from '../db/index.js';
@@ -18,6 +19,7 @@ interface ResourceRow {
   duration_hours: number;
   topics: string;
   stage: string;
+  scope: string;
   description: string;
   notes: string;
   verified: number;
@@ -44,6 +46,8 @@ export function rowToResource(row: ResourceRow): Resource {
     durationHours: Number(row.duration_hours),
     topics,
     stage: row.stage as StageId,
+    // 老数据可能没有 scope（迁移默认给了 supplement），这里再兜一层
+    scope: (row.scope === 'curriculum' ? 'curriculum' : 'supplement') as ResourceScope,
     description: row.description,
     notes: row.notes,
     verified: Number(row.verified) === 1,
@@ -52,7 +56,7 @@ export function rowToResource(row: ResourceRow): Resource {
 
 const SELECT_COLUMNS = `
   id, title, url, provider, language, difficulty, format,
-  duration_hours, topics, stage, description, notes, verified
+  duration_hours, topics, stage, scope, description, notes, verified
 `;
 
 export interface ResourceFilter {
@@ -60,6 +64,7 @@ export interface ResourceFilter {
   language?: LanguageCode;
   difficulty?: Difficulty;
   format?: ResourceFormat;
+  scope?: ResourceScope;
   q?: string;
   maxHours?: number;
   sort?: 'default' | 'duration-asc' | 'duration-desc' | 'title';
@@ -91,6 +96,10 @@ export function listResources(db: Db, filter: ResourceFilter = {}): Resource[] {
     clauses.push('format = ?');
     params.push(filter.format);
   }
+  if (filter.scope) {
+    clauses.push('scope = ?');
+    params.push(filter.scope);
+  }
   if (typeof filter.maxHours === 'number') {
     clauses.push('duration_hours <= ?');
     params.push(filter.maxHours);
@@ -117,11 +126,14 @@ export function listResources(db: Db, filter: ResourceFilter = {}): Resource[] {
       case 'title':
         return 'title ASC';
       default:
-        // 阶段顺序 + 难度从易到难，保证默认列表是「按学习路径排的」
+        // 默认排序即「按学习路径该先看什么」：
+        // 阶段顺序 → **完整体系课优先** → 难度从易到难 → 时长。
+        // 体系课排前面是刻意的：用户最需要的是能走完的路，而不是一堆碎片。
         return `CASE stage
             WHEN 'foundation' THEN 1 WHEN 'llm-core' THEN 2 WHEN 'rag' THEN 3
             WHEN 'agent' THEN 4 WHEN 'engineering' THEN 5 WHEN 'capstone' THEN 6
             ELSE 99 END ASC,
+          CASE scope WHEN 'curriculum' THEN 0 ELSE 1 END ASC,
           CASE difficulty WHEN 'beginner' THEN 1 WHEN 'intermediate' THEN 2 ELSE 3 END ASC,
           duration_hours ASC`;
     }
@@ -173,8 +185,8 @@ export function upsertResource(db: Db, resource: Resource): void {
   db.prepare(
     `INSERT INTO resources
        (id, title, url, provider, language, difficulty, format,
-        duration_hours, topics, stage, description, notes, verified)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        duration_hours, topics, stage, scope, description, notes, verified)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
      ON CONFLICT(id) DO UPDATE SET
        title = excluded.title,
        url = excluded.url,
@@ -185,6 +197,7 @@ export function upsertResource(db: Db, resource: Resource): void {
        duration_hours = excluded.duration_hours,
        topics = excluded.topics,
        stage = excluded.stage,
+       scope = excluded.scope,
        description = excluded.description,
        notes = excluded.notes,
        verified = excluded.verified`,
@@ -199,6 +212,7 @@ export function upsertResource(db: Db, resource: Resource): void {
     resource.durationHours,
     JSON.stringify(resource.topics),
     resource.stage,
+    resource.scope,
     resource.description,
     resource.notes,
     resource.verified ? 1 : 0,

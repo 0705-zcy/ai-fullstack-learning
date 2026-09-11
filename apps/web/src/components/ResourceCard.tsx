@@ -1,5 +1,13 @@
 import type { ProgressStatus, Resource } from '@aifs/shared';
-import { hostnameOf, DIFFICULTY_LABEL, FORMAT_LABEL, LANGUAGE_LABEL, formatHours, STATUS_LABEL } from '../lib/format.js';
+import {
+  hostnameOf,
+  DIFFICULTY_LABEL,
+  FORMAT_LABEL,
+  LANGUAGE_LABEL,
+  SCOPE_LABEL,
+  formatHours,
+  STATUS_LABEL,
+} from '../lib/format.js';
 import { Badge } from './ui.js';
 
 const STATUS_TONE: Record<ProgressStatus, 'slate' | 'blue' | 'green'> = {
@@ -49,7 +57,14 @@ export function ResourceCard({
             {resource.title}
           </a>
         </h3>
-        {status && <Badge tone={STATUS_TONE[status]}>{STATUS_LABEL[status]}</Badge>}
+        <span className="flex shrink-0 items-center gap-1.5">
+          {/* 体系课标记放在最显眼的位置：用户最先想知道的
+              就是「这门课能不能把我带到底」 */}
+          {resource.scope === 'curriculum' && (
+            <Badge tone="green">🎓 {SCOPE_LABEL.curriculum}</Badge>
+          )}
+          {status && <Badge tone={STATUS_TONE[status]}>{STATUS_LABEL[status]}</Badge>}
+        </span>
       </header>
 
       <p className="mt-1 text-xs text-slate-500">

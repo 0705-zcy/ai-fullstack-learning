@@ -64,4 +64,11 @@ export const MIGRATIONS: readonly string[] = [
   );
   CREATE INDEX idx_quiz_attempts_user_stage ON quiz_attempts(user_id, stage);
   `,
+
+  // v2：资源增加「覆盖范围」字段，用来区分完整体系课与单点补充。
+  // 已有数据默认归为 supplement，避免升级后出现语义不明的空值。
+  `
+  ALTER TABLE resources ADD COLUMN scope TEXT NOT NULL DEFAULT 'supplement';
+  CREATE INDEX idx_resources_stage_scope ON resources(stage, scope);
+  `,
 ];

@@ -15,6 +15,7 @@ const resource: Resource = {
   durationHours: 12,
   topics: ['rag', 'transformers'],
   stage: 'rag',
+  scope: 'curriculum',
   description: '从零讲清楚 Transformer 与检索增强生成。',
   notes: '免费开放，无需注册',
   verified: true,
@@ -47,6 +48,16 @@ describe('ResourceCard', () => {
   it('未核实的链接会给出显式警告', () => {
     render(<ResourceCard resource={{ ...resource, verified: false }} />);
     expect(screen.getByText(/链接未核实/)).toBeInTheDocument();
+  });
+
+  it('完整体系课会带上醒目的标记', () => {
+    render(<ResourceCard resource={{ ...resource, scope: 'curriculum' }} />);
+    expect(screen.getByText(/完整体系课/)).toBeInTheDocument();
+  });
+
+  it('单点补充不显示体系课标记（避免刷屏式徽章）', () => {
+    render(<ResourceCard resource={{ ...resource, scope: 'supplement' }} />);
+    expect(screen.queryByText(/完整体系课/)).not.toBeInTheDocument();
   });
 
   it('没有交互回调时不渲染进度按钮', () => {

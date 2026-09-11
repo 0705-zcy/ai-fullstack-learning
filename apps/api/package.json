@@ -17,6 +17,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "seed": "tsx src/seed/run-seed.ts",
     "demo:data": "tsx src/seed/export-demo-data.ts",
+    "check:links": "tsx src/seed/check-links.ts",
     "test": "vitest run"
   },
   "devDependencies": {
