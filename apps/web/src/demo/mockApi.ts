@@ -53,7 +53,8 @@ interface DemoState {
 }
 
 interface DemoData {
-  generatedAt: string;
+  resourceCount: number;
+  questionCount: number;
   resources: Resource[];
   questions: QuizQuestion[];
 }
@@ -503,9 +504,8 @@ export const demoControls = {
 
 /** 演示数据集的元信息，展示在演示横幅上。 */
 export const demoMeta = {
-  generatedAt: DATA.generatedAt,
-  resourceCount: RESOURCES.length,
-  questionCount: QUESTIONS.length,
+  resourceCount: DATA.resourceCount,
+  questionCount: DATA.questionCount,
 };
 
 /** 演示模式下登录页预填的凭据，省掉手输。 */

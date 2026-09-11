@@ -22,8 +22,9 @@ function main(): void {
   // 先校验，避免把坏数据导出到前端
   assertSeedValid(RESOURCES, QUIZ_QUESTIONS);
 
+  // 刻意**不写入时间戳**：导出结果只取决于种子数据本身，
+  // 这样重复运行 `npm run demo:data` 在内容没变时不会产生 git diff。
   const data = {
-    generatedAt: new Date().toISOString(),
     resourceCount: RESOURCES.length,
     questionCount: QUIZ_QUESTIONS.length,
     resources: RESOURCES,
